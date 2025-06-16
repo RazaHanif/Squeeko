@@ -1,12 +1,20 @@
-# Squeeko V2
+# Squeeko is dead, long live Squeeko.
 
-detials coming soon.
+Squeeko v1, AI voice transcription w/ translation is DOA
+Squeeko v2, Child Care CRM w/ built-in compliance is Born
+
+old squeeko repo incase you wanna learn from my mistakes, https://github.com/RazaHanif/Squeeko_deprecated
 
 ---
 
 ## Tech Stack
 
-🤫 **Classified** — its like magic ✨
+Backend: Node.js w/ Express
+Frontend: React, w/ some ai slop ux/ui design
+Database: Postgres w/ Prisma
+Backend Host: Fly.io
+Frontend Host: Vercel
+Database Host: Supabase
 
 ---
 
@@ -16,14 +24,8 @@ detials coming soon.
 
 ---
 
-## 🔒 License
-
-This project is proprietary and not open source, even tho you can read all the code here.... All rights reserved... i guess.
-
----
-
-## 📬 Contact
+## Contact
 
 Have questions, feedback, or want to collaborate?
 
-📧 Email: raza_hanif@live.com
+Email: raza_hanif@live.com
