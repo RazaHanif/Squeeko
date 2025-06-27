@@ -119,8 +119,6 @@ model Parent {
 enum ChildSex {
   MALE
   FEMALE
-  UNKNOWN
-  OTHER
 }
 
 model Child {
