@@ -41,8 +41,8 @@ model Center {
 }
 
 enum UserRole {
-  SUPER_ADMIN
-  CENTER_ADMIN
+  BIG_BOSS
+  CENTER_SUPERVISOR
   STAFF
   PARENT
 }
