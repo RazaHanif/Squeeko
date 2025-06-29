@@ -1,12 +1,13 @@
-// routes/authRoutes.js
 import { Router } from 'express';
-import { registerCenterAdmin, loginUser, getProfile } from '../controllers/authController.js';
-import { protect } from '../middleware/authMiddleware.js'; // Will create this
+
+import { registerCenter, registerUser, loginUser, getProfile } from '../controllers/authController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = Router();
 
-router.post('/register/center-admin', registerCenterAdmin);
-router.post('/login', loginUser);
+router.post('/regiser/center', registerCenter)
+router.post('/register/user', registerUser)
+router.post('/login', loginUser)
 router.get('/me', protect, getProfile); // This route is protected
 
 export default router;
