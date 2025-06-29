@@ -60,11 +60,7 @@ model User {
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   lastLoginAt  DateTime? @map("last_login_at") @db.Timestamptz(6)
-
-  usageQuotaMinutes      Int @default(60) @map("usage_quota_minutes")
-  usageConsumedMinutes   Int @default(0) @map("usage_consumed_minutes")
-  usageQuotaSummaries    Int @default(5) @map("usage_quota_summaries")
-  usageConsumedSummaries Int @default(0) @map("usage_consumed_summaries")
+  
 
   stripeCustomerId String? @unique @map("stripe_customer_id")
 
