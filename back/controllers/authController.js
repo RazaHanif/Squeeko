@@ -10,7 +10,7 @@ export const registerCenter = async (req, res, next) => {
 
     const name = data.name
     // Check if name already exists in db, name must be unique
-    
+    const nameCheck = prisma.$ec
 
 
     const address = data.address
