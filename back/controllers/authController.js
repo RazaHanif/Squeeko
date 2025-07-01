@@ -1,4 +1,5 @@
-// Basic imports
+import prisma from '../db/prisma'
+
 
 // Create a Center -- takes in form from frontend
 export const registerCenter = async (req, res, next) => {
@@ -9,21 +10,33 @@ export const registerCenter = async (req, res, next) => {
 
     const name = data.name
     // Check if name already exists in db, name must be unique
+    
+
 
     const address = data.address
-    // Check if address is real? 
-    // How to do that??
+    // Check if address is real?? -- IDK how to do that??
+    // Just going to make sure it exists for now
+    if (!address) {
+        return res.status(400).json({
+            error: 'Invalid Address'
+        })
+    }
 
     const phone = data.phone
     // regex check for valid number
-
-    const email = data.email
-    if (!validateEmail(email)) {
+    if (!validatePhone(phone)) {
         return res.status(400).json({
-            error: 'Invalid email address'
+            error: 'Invalid Phone Number'
         })
     }
+
+    const email = data.email
     // regex check for valid email
+    if (!validateEmail(email)) {
+        return res.status(400).json({
+            error: 'Invalid Email Address'
+        })
+    }
 
     const supervisor = data.supervisor
     // Check if name exists in users and has supervisor role
@@ -70,3 +83,9 @@ const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return re.test(email)
 }
+
+const validatePhone = (phoneNumber) => {
+    const re = /^(1[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{4}$/
+    return re.test(phoneNumber)
+}
+
