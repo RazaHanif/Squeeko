@@ -3,14 +3,12 @@ import prisma from '../db/prisma'
 
 // Create a Center -- takes in form from frontend
 export const registerCenter = async (req, res, next) => {
-    // TODO: Validate req.body (name, address, phone, email, supervisorName, regFee, latePickupFee)
-    
     try {
         // Server Side Validation before creating Center
         const data = req.body
     
         // No check needed - just check if it exists
-        const name = data.name.trim()
+        const name = data.name?.trim()
         if (!validateName(name)) {
             return res.status(400).json({
                 error: 'Invalid Name'
@@ -19,7 +17,7 @@ export const registerCenter = async (req, res, next) => {
     
         // Check if address is real?? -- IDK how to do that??
         // Just going to make sure it exists for now
-        const address = data.address.trim()
+        const address = data.address?.trim()
         if (!address) {
             return res.status(400).json({
                 error: 'Invalid Address'
@@ -58,35 +56,33 @@ export const registerCenter = async (req, res, next) => {
         // Check if name exists in users and has supervisor role
         const supervisorEmail = data.supervisorEmail
     
-        const supervisorCheck = await prisma.user.findFirst({
+        const supervisor = await prisma.user.findFirst({
             where: {
                 email: supervisorEmail
             }
         })
     
-        if (!supervisorCheck) {
+        if (!supervisor) {
             return res.status(400).json({
                 error: 'Supervisor does not exist'
             })
         }
     
-        if (supervisorCheck.role !== 'CENTER_SUPERVISOR') {
+        if (supervisor.role !== 'CENTER_SUPERVISOR') {
             return res.status(400).json({
-                error: `${supervisorCheck.firstName} ${supervisorCheck.lastName} does not have valid credentials`
+                error: `${supervisor.firstName} ${supervisor.lastName} does not have valid credentials`
             })
         }
-    
-        const supervisor = supervisorCheck.id
-    
+
         // Just check if the fees exist
-        const registrationFee = parseInt(data.registrationFee.trim())
+        const registrationFee = parseFloat(data.registrationFee.trim())
         if (isNaN(registrationFee)) {
             return res.status(400).json({
                 error: 'Invalid Registration Fee'
             })
         }
     
-        const lateFee = parseInt(data.lateFee.trim())
+        const lateFee = parseFloat(data.lateFee.trim())
         if (isNaN(lateFee)) {
             return res.status(400).json({
                 error: 'Invalid Late Fee'
@@ -101,20 +97,30 @@ export const registerCenter = async (req, res, next) => {
             })
         }
     
-        prisma.center.create({
+        const newCenter = await prisma.center.create({
             data: {
                 email: email,
                 name: name,
                 address: address,
                 phone: phone,
-                supervisor_id: supervisor,
+                supervisor: {
+                    connect: {
+                        id: supervisor.id
+                    }
+                },
                 registrationFee: registrationFee,
-                latePickpFee: lateFee,
+                latePickupFee: lateFee,
                 studentFees: fees
             }
         })
-    } catch (error) {
-        console.log(error)
+
+        return res.status(201).json(newCenter)
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}` 
+        })
     }
 }
 

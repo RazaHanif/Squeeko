@@ -14,7 +14,8 @@ model Center {
   name            String
   address         String?
   phone           String?
-  supervisor_id   String?  @map("supervisor_id")
+  supervisorId    String   @map("supervisor_id") @db.Uuid
+  supervisor      User     @relation("CenterSupervisor", fields: [supervisorId], references: [id])
   registrationFee Decimal  @default(0.00) @map("registration_fee") @db.Decimal(10, 2)
   latePickupFee   Decimal  @default(0.00) @map("late_pickup_fee") @db.Decimal(10, 2)
   studentFees     Json?    @map("student_fees") @db.JsonB
@@ -70,6 +71,7 @@ model User {
 
   childConsentsSignedBySupervisor ChildConsent[] @relation("SupervisorSignedBy")
   childConsentsSignedByParent     ChildConsent[] @relation("ParentSignedBy")
+  Center                          Center[]
 
   @@unique([centerId, email])
   @@map("users")
