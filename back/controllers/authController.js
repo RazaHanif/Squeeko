@@ -18,6 +18,11 @@ export const registerCenter = async (req, res, next) => {
     // regex check for valid number
 
     const email = data.email
+    if (!validateEmail(email)) {
+        return res.status(400).json({
+            error: 'Invalid email address'
+        })
+    }
     // regex check for valid email
 
     const supervisor = data.supervisor
@@ -58,4 +63,9 @@ export const loginUser = async (req, res, next) => {
 export const getProfile = async (req, res, next) => {
     // TODO: Validate req.body(user_id)
     // Return User
+}
+
+
+const validateEmail = (email) => {
+    
 }
