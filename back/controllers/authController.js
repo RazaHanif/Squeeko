@@ -5,52 +5,117 @@ import prisma from '../db/prisma'
 export const registerCenter = async (req, res, next) => {
     // TODO: Validate req.body (name, address, phone, email, supervisorName, regFee, latePickupFee)
     
-    // Do some server side validation for info
-    const data = req.body
-
-    const name = data.name
-    // Check if name already exists in db, name must be unique
-    const nameCheck = prisma.$ec
-
-
-    const address = data.address
-    // Check if address is real?? -- IDK how to do that??
-    // Just going to make sure it exists for now
-    if (!address) {
-        return res.status(400).json({
-            error: 'Invalid Address'
+    try {
+        // Server Side Validation before creating Center
+        const data = req.body
+    
+        // No check needed - just check if it exists
+        const name = data.name.trim()
+        if (!validateName(name)) {
+            return res.status(400).json({
+                error: 'Invalid Name'
+            })
+        }
+    
+        // Check if address is real?? -- IDK how to do that??
+        // Just going to make sure it exists for now
+        const address = data.address.trim()
+        if (!address) {
+            return res.status(400).json({
+                error: 'Invalid Address'
+            })
+        }
+    
+        // Check if its a valid Phone Number (logically not actually call testing)
+        const phone = data.phone
+        if (!validatePhone(phone)) {
+            return res.status(400).json({
+                error: 'Invalid Phone Number'
+            })
+        }
+    
+        // Check if its a valid Email (regex check not actually emailing rn)
+        const email = data.email
+        if (!validateEmail(email)) {
+            return res.status(400).json({
+                error: 'Invalid Email Address'
+            })
+        }
+    
+        // Make sure Center doesn't exist already
+        const emailCheck = await prisma.center.findFirst({
+            where: {
+                email: email
+            }
         })
-    }
-
-    const phone = data.phone
-    // regex check for valid number
-    if (!validatePhone(phone)) {
-        return res.status(400).json({
-            error: 'Invalid Phone Number'
+    
+        if (emailCheck) {
+            return res.status(400).json({
+                error: 'Center already exists'
+            })
+        } 
+    
+        // Check if name exists in users and has supervisor role
+        const supervisorEmail = data.supervisorEmail
+    
+        const supervisorCheck = await prisma.user.findFirst({
+            where: {
+                email: supervisorEmail
+            }
         })
-    }
-
-    const email = data.email
-    // regex check for valid email
-    if (!validateEmail(email)) {
-        return res.status(400).json({
-            error: 'Invalid Email Address'
+    
+        if (!supervisorCheck) {
+            return res.status(400).json({
+                error: 'Supervisor does not exist'
+            })
+        }
+    
+        if (supervisorCheck.role !== 'CENTER_SUPERVISOR') {
+            return res.status(400).json({
+                error: `${supervisorCheck.firstName} ${supervisorCheck.lastName} does not have valid credentials`
+            })
+        }
+    
+        const supervisor = supervisorCheck.id
+    
+        // Just check if the fees exist
+        const registrationFee = parseInt(data.registrationFee.trim())
+        if (isNaN(registrationFee)) {
+            return res.status(400).json({
+                error: 'Invalid Registration Fee'
+            })
+        }
+    
+        const lateFee = parseInt(data.lateFee.trim())
+        if (isNaN(lateFee)) {
+            return res.status(400).json({
+                error: 'Invalid Late Fee'
+            })
+        }
+    
+        // idk about this check, cuz like every center does it different
+        const fees = data.fees
+        if (!fees) {
+            return res.status(400).json({
+                error: 'what da heck!'
+            })
+        }
+    
+        prisma.center.create({
+            data: {
+                email: email,
+                name: name,
+                address: address,
+                phone: phone,
+                supervisor_id: supervisor,
+                registrationFee: registrationFee,
+                latePickpFee: lateFee,
+                studentFees: fees
+            }
         })
+    } catch (error) {
+        console.log(error)
     }
-
-    const supervisor = data.supervisor
-    // Check if name exists in users and has supervisor role
-
-    const registrationFee = data.registrationFee
-    const lateFee = data.lateFee
-    // Just check if the fees are valid prices
-
-    const fees = data.fees
-    // idk about this check, cuz like every center does it different
-    // maybe just check it exists as a key:value -- package1:$400
-
-
-
 }
 
 export const registerUser = async (req, res, next) => {
@@ -89,3 +154,7 @@ const validatePhone = (phoneNumber) => {
     return re.test(phoneNumber)
 }
 
+const validateName = (name) => {
+    const re = /^[a-zA-ZÀ-ÖØ-öø-ÿ' -]+$/
+    return re.test(name)
+}
