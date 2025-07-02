@@ -126,17 +126,98 @@ export const registerCenter = async (req, res, next) => {
 
 export const registerUser = async (req, res, next) => {
     // TODO: Validate req.body (centerId, center, email, passwordHash, name, role)
+    try {
+        const data = req.body
+
+        // Validate Center Id
+        const centerId = data.centerId
+        // Check if thats a real center
+        const center = await prisma.center.findFirst({
+            where: {
+                id: centerId
+            }
+        })
+
+        if (!center) {
+            return res.status(400).json({
+                error: `Center with id ${centerId} does not exist`
+            })
+        }
+
+        // Validate Email
+        const email = data.email
+
+        const checkEmail = validateEmail(email)
+
+        if(!checkEmail) { 
+            return res.status(400).json({
+                error: 'Invalid Email'
+            })
+        }
+
+        // This feels wrong?
+        // Should probably hash before storing even in a var
+        const password = data.password 
+
+        
+        // Might be overkill for name assingment
+        if (validateName(data.findFirst)) {
+            const firstName = data.firstName
+        } else {
+            return res.status(400).json({
+                error: 'Invalid First Name'
+            })
+        }
+        if (validateName(data.findFirst)) {
+            const lastName = data.lastName
+        } else {
+            return res.status(400).json({
+                error: 'Invalid Last Name'
+            })
+        }
+
+        // Validate Role Assignment
+
+        if (data.role === 'BIG_BOSS' || data.role === 'CENTER_SUPERVISOR' || data.role === 'STAFF' || data.role === 'PARENT') {
+            const role = data.role
+        }   else {
+            return res.status(400).json({
+                error: 'Invalid Role'
+            })
+        }
+
+        if (role === 'PARENT') {
+            return registerParent(data)
+        } else if (role === 'STAFF') {
+            return registerStaff(data)
+        } else if (role === 'CENTER_SUPERVISOR') {
+            return registerCenterSupervisor(data)
+        }
+
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
+    // 
     // Based on ROLE -> differnt sub route registerStaff or registerParent
 }
 
-const regiserParent = async (req, res, next) => {
+const registerParent = async (user) => {
     // TODO: Validate req.body(center, user, name, relation to child, address, phone, email, employer, workphone, child, policyagreements(retroactive), signedconsents, stripe_id)
     // Create Parent Profile
 }
 
-const registerStaff = async (req, res, next) => {
+const registerStaff = async (user) => {
     // TODO: Validate req.body(center, user, name, email, phonenumber, cpr, ece, tb, vaccines, policerecord, offensedec, )
     // Create Staff Profile
+}
+
+const registerCenterSupervisor = async (user) => {
+    // TODO: Validate req.body(center, user, name, relation to child, address, phone, email, employer, workphone, child, policyagreements(retroactive), signedconsents, stripe_id)
+    // Create Parent Profile
 }
 
 export const loginUser = async (req, res, next) => {
