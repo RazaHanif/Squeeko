@@ -177,10 +177,8 @@ export const registerUser = async (req, res, next) => {
         }
 
         // Validate Role Assignment
-
-        if (data.role === 'BIG_BOSS' || data.role === 'CENTER_SUPERVISOR' || data.role === 'STAFF' || data.role === 'PARENT') {
-            const role = data.role
-        }   else {
+        const role = data.role
+        if (role !== 'BIG_BOSS' || role !== 'CENTER_SUPERVISOR' || role !== 'STAFF' || role !== 'PARENT') {
             return res.status(400).json({
                 error: 'Invalid Role'
             })
