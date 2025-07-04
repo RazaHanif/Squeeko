@@ -3,7 +3,6 @@ import { Router } from 'express';
 const router = Router();
 
 router.post('/intake', intake)
-router.post('/parent', )
 router.get('/parent', getAllParents)
 router.get('/parent/:id', getParentById)
 router.put('/parent/:id', updateParentById)

@@ -1,10 +1,9 @@
 import prisma from '../db/prisma'
-
 import config from '../config/index'
 
 
-// Get all staff for a given center
-export const getAllStaff = async (req, res, next) => {
+// Send a message
+export const sendMessage = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -15,10 +14,10 @@ export const getAllStaff = async (req, res, next) => {
     }
 }
 
-// Get a specific staff by user.id
-export const getStaffById = async (req, res, next) => {
+// Get message thread with another user
+export const getMessageThread = async (req, res, next) => {
     try {
-
+    
     } catch (err) {
         console.log(err)
         return res.status(500).json({
@@ -27,10 +26,10 @@ export const getStaffById = async (req, res, next) => {
     }
 }
 
-// Update a specific staff by user.id
-export const updateStaffById = async (req, res, next) => {
+// Get current users messages
+export const getCurrentUserMessages = async (req, res, next) => {
     try {
-
+    
     } catch (err) {
         console.log(err)
         return res.status(500).json({
@@ -39,10 +38,11 @@ export const updateStaffById = async (req, res, next) => {
     }
 }
 
-// Delete a specific staff by user.id
-export const deleteStaffById = async (req, res, next) => {
+// Attach media to a message
+// Figure out how to upload to s3 with presigned url - or supabase idk yet
+export const uploadMediaToMessage = async (req, res, next) => {
     try {
-
+    
     } catch (err) {
         console.log(err)
         return res.status(500).json({
@@ -50,4 +50,3 @@ export const deleteStaffById = async (req, res, next) => {
         })
     }
 }
-
