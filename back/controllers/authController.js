@@ -385,16 +385,16 @@ export const loginUser = async (req, res, next) => {
             })
         }
 
-        const payload = {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            center: user.centerId
-        }
-
-        const token = jwt.sign(payload, JWT_SECRET, {
-            expiresIn: '7d'
-        })
+        const accessToken = jwt.sign({ 
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                center: user.centerId
+            }, 
+            JWT_SECRET, { expiresIn: '15m' }
+        )
+        
+        const refreshToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' })
 
         return res.status(200).json({
             token: token
@@ -464,7 +464,7 @@ export const updateProfile = async (req, res, next) => {
 }
 
 export const logout = async (req, res, next) => {
-    
+
 }
 
 
