@@ -1,4 +1,11 @@
+import jwt from 'jsonwebtoken'
+import { JsonWebTokenError } from 'jsonwebtoken'
 import prisma from '../db/prisma'
+import bcrypt from 'bcrypt'
+
+import config from '../config/index'
+
+const JWT_SECRET = config.JWT_SECRET
 
 
 // Create a Center -- takes in form from frontend
@@ -167,8 +174,7 @@ export const registerUser = async (req, res, next) => {
 
         // This feels wrong?
         // Should probably hash before storing even in a var
-        const password = data.password 
-
+        const password = await bcrypt.hasth(data.password, 10)
         
         // Might be overkill for name assingment
         const firstName = data.firstName
@@ -187,7 +193,7 @@ export const registerUser = async (req, res, next) => {
 
         // Validate Role Assignment
         const role = data.role
-        if (role !== 'BIG_BOSS' || role !== 'CENTER_SUPERVISOR' || role !== 'STAFF' || role !== 'PARENT') {
+        if (!['CENTER_SUPERVISOR', 'STAFF', 'PARENT'].includes(role)) {
             return res.status(400).json({
                 error: 'Invalid Role'
             })
@@ -202,7 +208,7 @@ export const registerUser = async (req, res, next) => {
                     }
                 },
                 email: email,
-                passwordHash: password,
+                passwordHash: passwordHashed,
                 firstName: firstName,
                 lastName: lastName,
                 role: role
@@ -286,24 +292,149 @@ const registerParent = async (data, userId) => {
 const registerStaff = async (data, userId) => {
     // TODO: Validate req.body(center, user, name, email, phonenumber, cpr, ece, tb, vaccines, policerecord, offensedec, )
     // Create Staff Profile
+    try {
+        // Cant really check if the dates are true, can only check if its a valid date time
+        if (!validateDateTime(data.cprRenewalDate)) {
+            return res.status(400).json({
+                error: 'Invalid CPR Renewal Date'
+            })
+        }
 
-    // Name, email, phoneNumber, already validated
+        if (!validateDateTime(data.eceLicenseExpiryDate)) {
+            return res.status(400).json({
+                error: 'Invalid ECE License Expiry Date'
+            })
+        }
 
-}
+        if (!validateDateTime(data.tbTestDate)) {
+            return res.status(400).json({
+                error: 'Invalid TB Test Date'
+            })
+        }
+        if (!validateDateTime(data.policeRecordCheckDate)) {
+            return res.status(400).json({
+                error: 'Invalid Police Record Check Date'
+            })
+        }
+        if (!validateDateTime(data.offenseDeclarationDate)) {
+            return res.status(400).json({
+                error: 'Invalid Offense Delaration Date'
+            })
+        }
 
-const registerCenterSupervisor = async (user) => {
-    // TODO: Validate req.body(center, user, name, relation to child, address, phone, email, employer, workphone, child, policyagreements(retroactive), signedconsents, stripe_id)
-    // Create Parent Profile
+        const newStaff = await prisma.staff.create({
+            data: {
+                centerId: data.centerId,
+                center: {
+                    connect: {
+                        id: data.centerId
+                    }
+                },
+                userId: userId,
+                user: {
+                    connect: {
+                        id: userId
+                    }
+                },
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                phoneNumber: data.phone,
+
+                cprRenewalDate: data.cprRenewalDate,
+                eceLicenseExpiryDate: data.eceLicenseExpiryDate,
+                tbTestDate: data.tbTestDate,
+                vaccinesList: data.vaccinesList,
+                policeRecordCheckDate: data.policeRecordCheckDate,
+                offenseDeclarationDate: data.offenseDeclarationDate
+            }
+        })
+
+        return res.status(201).json(newStaff)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
+
 }
 
 export const loginUser = async (req, res, next) => {
     // TODO: Validate req.body (email, password)
-    // Generate JWT for existing user
+    try {
+        const data = req.body
+        
+        const email = data.email
+
+        if (!validateEmail(email)) {
+            return res.status(400).json({
+                error: 'Invalid Email'
+            })
+        }
+
+        const user = await prisma.user.findFirst({
+            where: {
+                email: email
+            }
+        })
+
+        if (!user || !(await bcrypt.compare(data.password, user.passwordHash))) {
+            return res.status(400).json({
+                error: 'Invalid Username or Password!'
+            })
+        }
+
+        const payload = {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            center: user.centerId
+        }
+
+        const token = jwt.sign(payload, JWT_SECRET, {
+            expiresIn: '7d'
+        })
+
+        return res.status(200).json({
+            token: token
+        })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
 }
 
 export const getProfile = async (req, res, next) => {
     // TODO: Validate req.body(user_id)
-    // Return User
+    // Protected route only used by me
+
+    try {
+        const userId = req.body.userId
+
+        const user = await prisma.user.findFirst({
+            where: {
+                id: userId
+            }
+        })
+
+        if (!user) {
+            return res.status(400).json({
+                error: `User with id ${userId} does not exist` 
+            })
+        }
+
+        return res.status(200).json(user)
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
 }
 
 
@@ -320,4 +451,9 @@ const validatePhone = (phoneNumber) => {
 const validateName = (name) => {
     const re = /^[a-zA-ZÀ-ÖØ-öø-ÿ' -]+$/
     return re.test(name)
+}
+
+const validateDateTime = (dateTime) => {
+    const date = new Date(dateTime)
+    return !isNaN(date.getTime())
 }
