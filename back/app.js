@@ -3,7 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import config from './config/index'
-import authRoutes from './routes/authRoutes'
+import authRoutes from './routes/auth'
 import cookieParser from 'cookie-parser'
 
 
