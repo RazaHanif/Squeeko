@@ -77,3 +77,15 @@ export const getAttendanceForToday = async (req, res, next) => {
         })
     }
 }
+
+// view all attendance history
+export const getAllAttendance = async (req, res, next) => {
+    try {
+    // pull by child id
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
+}
