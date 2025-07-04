@@ -4,6 +4,8 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import config from './config/index'
 import authRoutes from './routes/authRoutes'
+import cookieParser from 'cookie-parser'
+
 
 const app = express()
 
@@ -13,6 +15,7 @@ app.use(express.json())
 app.use(cors())
 app.use(helemt())
 app.use(morgan('dev'))
+app.use(cookieParser())
 
 // Routes 
 app.get('/', (req, res) => {

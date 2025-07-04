@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import config from '../config/index'
 
 const JWT_SECRET = config.JWT_SECRET
+const JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET
 
 
 // Create a Center -- takes in form from frontend
@@ -394,10 +395,17 @@ export const loginUser = async (req, res, next) => {
             JWT_SECRET, { expiresIn: '15m' }
         )
         
-        const refreshToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' })
+        const refreshToken = jwt.sign({ id: user.id }, JWT_REFRESH_SECRET, { expiresIn: '7d' })
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: config.NODE_ENV ==='production',
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         return res.status(200).json({
-            token: token
+            accessToken
         })
 
     } catch (err) {
@@ -407,6 +415,54 @@ export const loginUser = async (req, res, next) => {
         })
     }
 }
+
+
+export const refreshAccessToken = async (req, res, next) => {
+    try {
+        
+        const token = req.cookies.refreshToken
+
+        if (!token) {
+            return res.status(401).json({
+                error: 'No Refresh Token Provided'
+            })
+        }
+
+        const decoded = jwt.verify(token, JWT_REFRESH_SECRET)
+
+        const user = await prisma.user.findFirst({
+            where: {
+                id: decoded.id
+            }
+        })
+
+        if (!user) {
+            return res.status(404).json({
+                error: 'User not found'
+            })
+        }
+
+        const accessToken = jwt.sign({ 
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                center: user.centerId
+            }, 
+            JWT_SECRET, { expiresIn: '15m' }
+        )
+
+        return res.status(200).json({
+            accessToken
+        })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
+}
+
 
 export const getProfile = async (req, res, next) => {
     // TODO: Validate req.body(user_id)
@@ -464,6 +520,11 @@ export const updateProfile = async (req, res, next) => {
 }
 
 export const logout = async (req, res, next) => {
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: config.NODE_ENV === 'production',
+        sameSite: 'Strict'
+    })
 
 }
 
