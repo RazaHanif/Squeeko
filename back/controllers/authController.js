@@ -155,22 +155,31 @@ export const registerUser = async (req, res, next) => {
             })
         }
 
+        const phone = data.phone
+
+        const checkPhone = validatePhone(phone)
+
+        if (!checkPhone) {
+            return res.status(400).json({
+                error: 'Invalid Phone Number'
+            })
+        }
+
         // This feels wrong?
         // Should probably hash before storing even in a var
         const password = data.password 
 
         
         // Might be overkill for name assingment
-        if (validateName(data.findFirst)) {
-            const firstName = data.firstName
-        } else {
+        const firstName = data.firstName
+
+        if (!validateName(firstName)) {
             return res.status(400).json({
                 error: 'Invalid First Name'
             })
         }
-        if (validateName(data.findFirst)) {
-            const lastName = data.lastName
-        } else {
+        const lastName = data.lastName
+        if (!validateName(lastName)) {
             return res.status(400).json({
                 error: 'Invalid Last Name'
             })
@@ -184,14 +193,29 @@ export const registerUser = async (req, res, next) => {
             })
         }
 
+        const newUser = await prisma.user.create({
+            data: {
+                centerId: centerId,
+                center: {
+                    connect: {
+                        id: centerId
+                    }
+                },
+                email: email,
+                passwordHash: password,
+                firstName: firstName,
+                lastName: lastName,
+                role: role
+            }
+        })
+
         if (role === 'PARENT') {
-            return registerParent(data)
+            return registerParent(data, newUser.id)
         } else if (role === 'STAFF') {
-            return registerStaff(data)
-        } else if (role === 'CENTER_SUPERVISOR') {
-            return registerCenterSupervisor(data)
+            return registerStaff(data, newUser.id)
         }
 
+        return res.status(201).json(newUser)
 
     } catch (err) {
         console.log(err)
@@ -199,18 +223,72 @@ export const registerUser = async (req, res, next) => {
             error: `Error: ${err}`
         })
     }
-    // 
-    // Based on ROLE -> differnt sub route registerStaff or registerParent
 }
 
-const registerParent = async (user) => {
+const registerParent = async (data, userId) => {
     // TODO: Validate req.body(center, user, name, relation to child, address, phone, email, employer, workphone, child, policyagreements(retroactive), signedconsents, stripe_id)
     // Create Parent Profile
+
+    try {        
+        // At this point all info besides work number has been validated in prev func
+        const workPhone = data.workNumber
+    
+        const checkWorkPhone = validatePhone(workPhone)
+    
+        if (!checkWorkPhone) {
+            return res.status(400).json({
+                error: 'Invalid Work Phone Number'
+            })
+        }
+    
+        if (!data.relationshipToChild) {
+            return res.status(400).json({
+                error: 'Invalid Relationship to child'
+            })
+        }
+    
+        const newParent = await prisma.parent.create({
+            data: {
+                centerId: data.centerId,
+                center: {
+                    connect: {
+                        id: data.centerId
+                    }
+                },
+                userId: userId,
+                user: {
+                    connect: {
+                        id: userId
+                    }
+                },
+                firstName: data.firstName,
+                lastName: data.lastName,
+                relationshipToChild: data.relationshipToChild,
+                address: data.address,
+                phoneNumber: data.phone,
+                emailAddress: data.email,
+                employer: data.employer,
+                workNumber: data.workNumber,
+            }
+        })
+    
+        // Gotta figure out how to assign Children[] PolicyAgreements[] & SignedConsents[]
+    
+        return res.status(201).json(newParent)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
 }
 
-const registerStaff = async (user) => {
+const registerStaff = async (data, userId) => {
     // TODO: Validate req.body(center, user, name, email, phonenumber, cpr, ece, tb, vaccines, policerecord, offensedec, )
     // Create Staff Profile
+
+    // Name, email, phoneNumber, already validated
+
 }
 
 const registerCenterSupervisor = async (user) => {
