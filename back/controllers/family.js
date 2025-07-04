@@ -1,5 +1,4 @@
 import prisma from '../db/prisma'
-
 import config from '../config/index'
 
 export const intake = async (req, res, next) => {

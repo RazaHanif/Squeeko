@@ -71,7 +71,6 @@ model User {
 
   childConsentsSignedBySupervisor ChildConsent[] @relation("SupervisorSignedBy")
   childConsentsSignedByParent     ChildConsent[] @relation("ParentSignedBy")
-  centers                         Center[]
   Center                          Center[]
 
   @@unique([centerId, email])
