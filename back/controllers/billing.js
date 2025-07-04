@@ -1,8 +1,21 @@
 import prisma from '../db/prisma'
-
 import config from '../config/index'
 
-export const intake = async (req, res, next) => {
+
+// Get all invoices for a center
+export const getAllInvoices = async (req, res, next) => {
+    try {
+    
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: `Error: ${err}`
+        })
+    }
+}
+
+// Get specific invoice by invoice id
+export const getInvoiceByID = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -14,8 +27,9 @@ export const intake = async (req, res, next) => {
 }
 
 
-// Get all parents for a given center
-export const getAllParents = async (req, res, next) => {
+
+// Get all invoices for a parent
+export const getAllInvoicesForParentId = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -26,8 +40,8 @@ export const getAllParents = async (req, res, next) => {
     }
 }
 
-// Get a specific parent by id
-export const getParentById = async (req, res, next) => {
+// Create new invoices
+export const createNewInvoice = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -38,8 +52,9 @@ export const getParentById = async (req, res, next) => {
     }
 }
 
-// Update a specific parent by id
-export const updateParentById = async (req, res, next) => {
+
+// Get all invoice history for center
+export const getAllInvoiceHistory = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -50,8 +65,8 @@ export const updateParentById = async (req, res, next) => {
     }
 }
 
-// Delete a specific parent by id
-export const deleteParentById = async (req, res, next) => {
+// Get all invoice history for parent
+export const getAllInvoiceHistoryForParentId = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -62,8 +77,8 @@ export const deleteParentById = async (req, res, next) => {
     }
 }
 
-// Get all children for a given center
-export const getAllChildren = async (req, res, next) => {
+// Make a one time payment
+export const makePayment = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -74,8 +89,8 @@ export const getAllChildren = async (req, res, next) => {
     }
 }
 
-// Get a specific child by id
-export const getChildById = async (req, res, next) => {
+// Create a recurring payment
+export const makeRecurringPayment = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -86,8 +101,9 @@ export const getChildById = async (req, res, next) => {
     }
 }
 
-// Update a specific child by id
-export const updateChildById = async (req, res, next) => {
+
+// Get parents stripe Id
+export const getStripeIdForParentId = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -98,8 +114,9 @@ export const updateChildById = async (req, res, next) => {
     }
 }
 
-// Delete a specific child by id
-export const deleteChildById = async (req, res, next) => {
+
+// Stripe Webhook
+export const stripeWebhook = async (req, res, next) => {
     try {
     
     } catch (err) {
@@ -109,4 +126,3 @@ export const deleteChildById = async (req, res, next) => {
         })
     }
 }
-

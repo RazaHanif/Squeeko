@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { deleteChildById, deleteParentById, getAllChildren, getAllParents, getChildById, getParentById, intake, updateChildById, updateParentById } from '../controllers/family';
 
 const router = Router();
 
