@@ -437,6 +437,36 @@ export const getProfile = async (req, res, next) => {
     }
 }
 
+export const updateProfile = async (req, res, next) => {
+    // Let the user update thier own profile
+    // Can only change password?
+
+    const currentUser = req.user.id
+    const data = req.body
+    const password = await bcrypt.hasth(data.password, 10)
+
+    const updatedUser = prisma.user.update({
+        where: {
+            id: currentUser
+        },
+        data: {
+            passwordHash: password
+        }
+    })
+
+    if (!updatedUser) {
+        return res.status(400).json({
+            error: 'honestly, who knows...'
+        })
+    }
+
+    return res.status(200).json(updatedUser)
+}
+
+export const logout = async (req, res, next) => {
+    
+}
+
 
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
