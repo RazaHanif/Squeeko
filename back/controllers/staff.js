@@ -105,18 +105,14 @@ export const updateStaffById = async (req, res, next) => {
             })
         }
 
-        const staff = await prisma.staff.findUnique({
+        const updateStaff = prisma.staff.update({
             where: {
                 id: staffId
             },
-            select: staffSafeSelect
+            data: {
+                
+            }
         })
-
-        if (!staff) {
-            return res.status(404).json({
-                error: `No staff found with id ${staffId}`
-            })
-        }
 
         return res.status(200).json({
             staff: staff
