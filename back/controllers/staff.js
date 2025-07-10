@@ -6,7 +6,8 @@ import config from '../config/index'
 
 
 /* 
-CHANGE ALL UPDATE, READ, DELETE FUNCS TO TRY/CATCH
+CHANGE ALL UPDATE, READ, DELETE FUNCS TO TRY/CATCH\
+
 */
 
 
