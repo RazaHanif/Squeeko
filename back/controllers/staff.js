@@ -86,6 +86,9 @@ export const getStaffById = async (req, res, next) => {
 }
 
 // Update a specific staff by staff.id
+// Can only update, firstName, lastName, email, phoneNumber
+
+// Will make seperate funcs for each renewal / expiry date
 export const updateStaffById = async (req, res, next) => {
     try {
         let staffId = req.params.staffId
@@ -110,7 +113,7 @@ export const updateStaffById = async (req, res, next) => {
                 id: staffId
             },
             data: {
-                
+                cprRenewalDate
             }
         })
 
