@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import prisma from '../db/prisma'
 import bcrypt from 'bcrypt'
+import { validateDateTime, validateEmail, validateName, validatePhone } from '../utils/validate'
 
 import config from '../config/index'
 
@@ -526,25 +527,4 @@ export const logout = async (req, res, next) => {
         sameSite: 'Strict'
     })
 
-}
-
-
-const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(email)
-}
-
-const validatePhone = (phoneNumber) => {
-    const re = /^(1[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{4}$/
-    return re.test(phoneNumber)
-}
-
-const validateName = (name) => {
-    const re = /^[a-zA-ZÀ-ÖØ-öø-ÿ' -]+$/
-    return re.test(name)
-}
-
-const validateDateTime = (dateTime) => {
-    const date = new Date(dateTime)
-    return !isNaN(date.getTime())
 }
