@@ -15,21 +15,21 @@ export const getAllStaff = async (req, res, next) => {
             })
         }
 
-        const center = prisma.staff.findMany({
+        const staff = prisma.staff.findMany({
             where: {
                 centerId: centerId
             },
             select: staffSafeSelect
         })
 
-        if (!center) {
+        if (!staff) {
             return res.status(404).json({
-                error: 'No Center found'
+                error: `No staff found for center ${centerId}`
             })
         }
 
         return res.status(200).json({
-            staff: center.staff
+            staff: staff
         })
     
     } catch (err) {
@@ -40,9 +40,42 @@ export const getAllStaff = async (req, res, next) => {
     }
 }
 
-// Get a specific staff by user.id
+// Get a specific staff by staff.id
 export const getStaffById = async (req, res, next) => {
     try {
+        let staffId = req.params.staffId
+
+        try {
+            staffId = parseInt(staffId)
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json({
+                error: 'Invalid Staff ID'
+            })
+        }
+
+        if (!staffId) {
+            return res.status(400).json({
+                error: 'Invalid Staff ID'
+            })
+        }
+
+        const staff = await prisma.staff.findUnique({
+            where: {
+                id: staffId
+            },
+            select: staffSafeSelect
+        })
+
+        if (!staff) {
+            return res.status(404).json({
+                error: `No staff found with id ${staffId}`
+            })
+        }
+
+        return res.status(200).json({
+            staff: staff
+        })
 
     } catch (err) {
         console.log(err)
@@ -52,9 +85,42 @@ export const getStaffById = async (req, res, next) => {
     }
 }
 
-// Update a specific staff by user.id
+// Update a specific staff by staff.id
 export const updateStaffById = async (req, res, next) => {
     try {
+        let staffId = req.params.staffId
+
+        try {
+            staffId = parseInt(staffId)
+        } catch (error) {
+            console.log(error)
+            return res.status(400).json({
+                error: 'Invalid Staff ID'
+            })
+        }
+
+        if (!staffId) {
+            return res.status(400).json({
+                error: 'Invalid Staff ID'
+            })
+        }
+
+        const staff = await prisma.staff.findUnique({
+            where: {
+                id: staffId
+            },
+            select: staffSafeSelect
+        })
+
+        if (!staff) {
+            return res.status(404).json({
+                error: `No staff found with id ${staffId}`
+            })
+        }
+
+        return res.status(200).json({
+            staff: staff
+        })
 
     } catch (err) {
         console.log(err)
@@ -64,7 +130,7 @@ export const updateStaffById = async (req, res, next) => {
     }
 }
 
-// Delete a specific staff by user.id
+// Delete a specific staff by staff.id
 export const deleteStaffById = async (req, res, next) => {
     try {
 
