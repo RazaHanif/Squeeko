@@ -9,6 +9,8 @@ import config from '../config/index'
 const JWT_SECRET = config.JWT_SECRET
 const JWT_REFRESH_SECRET = config.JWT_REFRESH_SECRET
 
+// TODO: Seperate out the User / Staff / Parent Creation from this to its own controllers
+// redo login / register etc with BetterAuth
 
 // Create a Center -- takes in form from frontend
 export const registerCenter = async (req, res, next) => {
