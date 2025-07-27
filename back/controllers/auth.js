@@ -3,6 +3,7 @@ import { JsonWebTokenError } from 'jsonwebtoken'
 import prisma from '../db/prisma'
 import bcrypt from 'bcrypt'
 import { validateDateTime, validateEmail, validateName, validatePhone } from '../utils/validate'
+import { authClient } from "@/lib/auth-client"
 
 import config from '../config/index'
 
