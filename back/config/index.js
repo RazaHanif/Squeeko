@@ -14,6 +14,11 @@ const config = {
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
     NODE_ENV: process.env.NODE_ENV || 'development',
 
+    BETTER_AUTH: {
+        SECRET: process.env.BETTER_AUTH_SECRET,
+        URL: process.env.BETTER_AUTH_URL,
+    },
+
     // Cloud Storage -- idk if i need this yet
     // Will need to rename
     cloudStorage: {
