@@ -43,7 +43,7 @@ model Center {
   @@map("centers")
 }
 
-enum UserRole {
+enum Role {
   BIG_BOSS
   CENTER_SUPERVISOR
   STAFF
@@ -51,36 +51,21 @@ enum UserRole {
 }
 
 model User {
-  id           String    @id @default(uuid()) @map("id") @db.Uuid
-  centerId     String?   @map("center_id") @db.Uuid
-  center       Center?   @relation(fields: [centerId], references: [id])
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  firstName    String?   @map("first_name")
-  lastName     String?   @map("last_name")
-  role         UserRole  @default(PARENT)
-  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  lastLoginAt  DateTime? @map("last_login_at") @db.Timestamptz(6)
+  id    String  @id @default(uuid()) @map("id") @db.Uuid
+  email String  @unique
+  name  String?
+  role  Role
 
-  stripeCustomerId String? @unique @map("stripe_customer_id")
-
-  jobs          Job[]
-  parentProfile Parent?
-  staffProfile  Staff?
-
-  childConsentsSignedBySupervisor ChildConsent[] @relation("SupervisorSignedBy")
-  childConsentsSignedByParent     ChildConsent[] @relation("ParentSignedBy")
-  name                            String
-  emailVerified                   Boolean
-  image                           String?
-  sessions                        Session[]
-  accounts                        Account[]
-  Center                          Center[]
-  Center                          Center[]
-
-  @@unique([centerId, email])
-  @@map("users")
+  parent       Parent?
+  staff        Staff?
+  centerId     String?
+  center       Center?        @relation(fields: [centerId], references: [id])
+  Center       Center[]
+  Job          Job[]
+  ChildConsent ChildConsent[]
+  ChildConsent ChildConsent[]
+  Session      Session[]
+  Account      Account[]
 }
 
 model Job {
