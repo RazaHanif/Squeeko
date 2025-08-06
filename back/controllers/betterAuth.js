@@ -78,11 +78,22 @@ export const signUp = async (req, res, next) => {
                 }
             })
         }
+
+        res.status(201).json({ user })
     } catch (err) {
-        console.log(err)
+        res.status(500).json({
+            error: err.message
+        })
     }
 }
 
 export const signIn = async (req, res, next) => {
+    try {
+        
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        })
+    }
 
 }
