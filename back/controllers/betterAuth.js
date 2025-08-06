@@ -35,7 +35,9 @@ export const signUp = async (req, res, next) => {
             body: {
                 email,
                 password,
-                name,
+                first_name,
+                middle_name,
+                last_name,
                 role
             }
         })
