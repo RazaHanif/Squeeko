@@ -21,7 +21,11 @@ export const signUp = async (req, res, next) => {
         }
 
         // Might be overkill for name checking
-        if (!validateName(first_name) || !validateName(last_name) || !validateName(middle_name)) {
+        if (
+            !validateName(first_name) || 
+            !validateName(last_name) || 
+            (middle_name && !validateName(middle_name)) 
+        ) {
             return res.status(400).json({
                 error: 'Invalid Name'
             })
