@@ -9,13 +9,10 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    user: {
-        model: 'User',
-        fields: {
-            role: 'enum',
-            firstName: 'string',
-            middleName: 'string',
-            lastName: 'string'
-        }
+    extendUser: {
+        role: true,
+        first_name: true,
+        middle_name: true,
+        last_name: true,
     }
 })
