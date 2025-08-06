@@ -104,6 +104,19 @@ export const signIn = async (req, res, next) => {
     }
 }
 
+export const signOut = async (req, res, next) => {
+    try {
+        await auth.api.signOut({ req })
+        res.status(200).json({
+            message: 'Successfully logged out'
+        })
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        })
+    }
+}
+
 export const me = async (req, res, next) => {
     try {
         const session = await auth.api.getSession({ req })
@@ -128,7 +141,7 @@ export const me = async (req, res, next) => {
     } catch (err) {
         res.status(500).json({
             error: err.message
-        })
-        
+        })       
     }
 }
+
