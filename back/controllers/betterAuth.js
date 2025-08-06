@@ -42,7 +42,7 @@ export const signUp = async (req, res, next) => {
         }
 
         // Create user with BetterAuth
-        const { user } = await auth.api.signUp.email({
+        const { user } = await auth.api.signUpEmail({
             body: {
                 email,
                 password,
@@ -89,7 +89,13 @@ export const signUp = async (req, res, next) => {
 
 export const signIn = async (req, res, next) => {
     try {
+        const { email, password } = req.body
         
+        const session = await auth.api.signInEmail({
+            body: { email, password}
+        })
+
+        res.status(200).json({ session })
     } catch (err) {
         res.status(500).json({
             error: err.message
