@@ -9,12 +9,12 @@ datasource db {
 }
 
 model User {
-  id         String  @id @default(cuid())
-  email      String  @unique
+  id          String  @id @default(cuid())
+  email       String  @unique
   first_name  String
   middle_name String?
   last_name   String
-  role       Role
+  role        Role
 
   parent Parent?
   staff  Staff?
@@ -22,136 +22,136 @@ model User {
 }
 
 model Center {
-  id           String @id @default(cuid())
-  name         String
-  address      String
+  id            String @id @default(cuid())
+  name          String
+  address       String
   phone_number  String
-  email        String
-  supervisor   User   @relation(fields: [supervisorId], references: [id])
-  supervisorId String
+  email         String
+  supervisor    User   @relation(fields: [supervisor_id], references: [id])
+  supervisor_id String
 
-  parents          Parent[]
-  staff            Staff[]
-  children         Child[]
-  attendances      Attendance[]
-  billings         Billing[]
-  ChildMedicalInfo ChildMedicalInfo[]
-  ChildConsent     ChildConsent[]
+  parents            Parent[]
+  staff              Staff[]
+  children           Child[]
+  attendances        Attendance[]
+  billings           Billing[]
+  child_medical_info ChildMedicalInfo[]
+  child_consent      ChildConsent[]
 }
 
 model Parent {
-  id                   String    @id @default(cuid())
-  address              String
-  phoneNumber          String
-  alternatePhoneNumber String?
-  employer             String?
-  center               Center    @relation(fields: [centerId], references: [id])
-  centerId             String
-  user                 User      @relation(fields: [userId], references: [id])
-  userId               String    @unique
-  children             Child[]
-  billings             Billing[]
+  id               String    @id @default(cuid())
+  address          String
+  phone_number     String
+  alt_phone_number String?
+  employer         String?
+  center           Center    @relation(fields: [center_id], references: [id])
+  center_id        String
+  user             User      @relation(fields: [user_id], references: [id])
+  user_id          String    @unique
+  children         Child[]
+  billings         Billing[]
 }
 
 model Staff {
-  id                     String    @id @default(cuid())
-  address                String
-  phoneNumber            String
-  position               Position
-  cprDate                DateTime?
-  eceDate                DateTime?
-  tbDate                 DateTime?
-  policeCheckDate        DateTime?
-  offenseDeclarationDate DateTime?
-  center                 Center    @relation(fields: [centerId], references: [id])
-  centerId               String
-  user                   User      @relation(fields: [userId], references: [id])
-  userId                 String    @unique
+  id                       String    @id @default(cuid())
+  address                  String
+  phone_number             String
+  position                 Position
+  cpr_date                 DateTime?
+  ece_date                 DateTime?
+  tb_date                  DateTime?
+  police_check_date        DateTime?
+  offense_declaration_date DateTime?
+  center                   Center    @relation(fields: [center_id], references: [id])
+  center_id                String
+  user                     User      @relation(fields: [user_id], references: [id])
+  user_id                  String    @unique
 }
 
 model Child {
-  id                String             @id @default(cuid())
-  firstName         String
-  middleName        String?
-  lastName          String
-  preferredName     String?
-  dob               DateTime
-  sex               ChildSex
-  center            Center             @relation(fields: [centerId], references: [id])
-  centerId          String
-  parents           Parent[]
-  emergencyContacts EmergencyContact[]
-  medicalInfo       ChildMedicalInfo?
-  consents          ChildConsent[]
-  attendances       Attendance[]
+  id                 String             @id @default(cuid())
+  first_name         String
+  middle_name        String?
+  last_name          String
+  preferred_name     String?
+  dob                DateTime
+  sex                ChildSex
+  center             Center             @relation(fields: [center_id], references: [id])
+  center_id          String
+  parents            Parent[]
+  emergency_contacts EmergencyContact[]
+  medical_info       ChildMedicalInfo?
+  consents           ChildConsent[]
+  attendances        Attendance[]
 }
 
 model EmergencyContact {
-  id          String @id @default(cuid())
-  name        String
-  phoneNumber String
-  relation    String
-  child       Child  @relation(fields: [childId], references: [id])
-  childId     String
+  id           String @id @default(cuid())
+  name         String
+  phone_number String
+  relation     String
+  child        Child  @relation(fields: [child_id], references: [id])
+  child_id     String
 }
 
 model ChildMedicalInfo {
-  id                        String                     @id @default(cuid())
-  child                     Child                      @relation(fields: [childId], references: [id])
-  childId                   String                     @unique
-  center                    Center                     @relation(fields: [centerId], references: [id])
-  centerId                  String
-  immunizationRecordUrl     String?
-  immunizationExemption     ImmunizationExemptionType?
-  communicableDiseases      String?
-  medicalNeeds              String?
-  medicalDevices            String?
-  medicalDeviceInstructions String?
-  allergies                 Json?
-  lifeThreateningAllergies  Json?
-  dietaryReq                Json?
-  isInDiapers               Boolean
-  toileting                 ToiletingSupportLevel
+  id                          String                     @id @default(cuid())
+  child                       Child                      @relation(fields: [child_id], references: [id])
+  child_id                    String                     @unique
+  center                      Center                     @relation(fields: [center_id], references: [id])
+  center_id                   String
+  immunization_record_url     String?
+  immunization_exemption      ImmunizationExemptionType?
+  communicable_diseases       String?
+  medical_needs               String?
+  medical_devices             String?
+  medical_device_instructions String?
+  allergies                   Json?
+  life_threatening_allergies  Json?
+  dietary_req                 Json?
+  is_in_diapers               Boolean
+  toileting                   ToiletingSupportLevel
 }
 
 model ChildConsent {
-  id                             String   @id @default(cuid())
-  center                         Center   @relation(fields: [centerId], references: [id])
-  centerId                       String
-  child                          Child    @relation(fields: [childId], references: [id])
-  childId                        String
-  updatedAt                      DateTime @updatedAt
-  photoConsent                   Boolean
-  sunscreenConsent               Boolean
-  lotionConsent                  Boolean
-  lipBalmConsent                 Boolean
-  diaperRashCreamConsent         Boolean
-  handSanitizerConsent           Boolean
-  nonPrescriptionMedicineConsent Boolean
+  id                                String   @id @default(cuid())
+  center                            Center   @relation(fields: [center_id], references: [id])
+  center_id                         String
+  child                             Child    @relation(fields: [child_id], references: [id])
+  child_id                          String
+  updated_at                        DateTime @updatedAt
+  photo_consent                     Boolean
+  sunscreen_consent                 Boolean
+  lotion_Consent                    Boolean
+  lip_balm_consent                  Boolean
+  diaper_rash_cream_consent         Boolean
+  hand_sanitizer_consent            Boolean
+  non_prescription_medicine_consent Boolean
 }
 
 model Attendance {
-  id        String   @id @default(cuid())
-  center    Center   @relation(fields: [centerId], references: [id])
-  centerId  String
-  child     Child    @relation(fields: [childId], references: [id])
-  childId   String
-  date      DateTime
-  isPresent Boolean
-  notes     String?
+  id         String   @id @default(cuid())
+  center     Center   @relation(fields: [center_id], references: [id])
+  center_id  String
+  child      Child    @relation(fields: [child_id], references: [id])
+  child_id   String
+  date       DateTime
+  is_present Boolean
+  notes      String?
 }
 
 model Billing {
   id          String   @id @default(cuid())
-  center      Center   @relation(fields: [centerId], references: [id])
-  centerId    String
-  parent      Parent   @relation(fields: [parentId], references: [id])
-  parentId    String
+  center      Center   @relation(fields: [center_id], references: [id])
+  center_id   String
+  parent      Parent   @relation(fields: [parent_id], references: [id])
+  parent_id   String
   amount      Float
   description String?
-  dueDate     DateTime
+  due_date    DateTime
   paid        Boolean  @default(false)
-  stripeId    String?
+  stripe_id   String?
 }
 
 enum Role {
