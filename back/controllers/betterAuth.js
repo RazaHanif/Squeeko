@@ -63,6 +63,18 @@ export const signUp = async (req, res, next) => {
                     phone_number,
                     alt_phone_number: alt_phone_number || null,
                     employer: employer || null,
+                    // add children and billing in seperate func
+                }
+            })
+        }
+        else if (role === 'STAFF') {
+            await prisma.staff.create({
+                data: {
+                    user_id: user.id,
+                    center_id,
+                    address,
+                    phone_number,
+                    // will add cpr, ece, tb etc, dates in seperate func
                 }
             })
         }
