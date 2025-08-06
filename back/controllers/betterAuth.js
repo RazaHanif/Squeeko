@@ -154,7 +154,9 @@ export const updatePassword = async (req, res, next) => {
 
         await auth.api.updatePassword({
             body: {
-                user
+                user_id: session.user.id,
+                oldPassword,
+                newPassword
             }
         })
 
