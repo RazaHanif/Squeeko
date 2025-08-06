@@ -63,7 +63,6 @@ export const signUp = async (req, res, next) => {
                     phone_number,
                     alt_phone_number: alt_phone_number || null,
                     employer: employer || null,
-                    
                 }
             })
         }
