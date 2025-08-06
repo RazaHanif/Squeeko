@@ -10,6 +10,12 @@ export const auth = betterAuth({
         enabled: true,
     },
     user: {
-        
+        model: 'User',
+        fields: {
+            role: 'enum',
+            firstName: 'string',
+            middleName: 'string',
+            lastName: 'string'
+        }
     }
 })
