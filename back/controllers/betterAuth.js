@@ -114,7 +114,55 @@ export const signOut = async (req, res, next) => {
 }
 
 export const updateName = async (req, res, next) => {
-    
+    try {
+        const session = await auth.api.getSession({ req })
+        if (!session) return res.status(401).json({
+            error: 'Unauthorized'
+        })
+
+        const { first_name, middle_name, last_name } = req.body
+
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: session.user.id
+            },
+            data: {
+                first_name,
+                middle_name: middle_name || null,
+                last_name
+            }
+        })
+
+        res.status(200).json({ updatedUser })
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        })
+    }
+}
+
+export const updatePassword = async (req, res, next) => {
+    try {
+        const session = await auth.api.getSession({ req })
+        if (!session) {
+            return res.status(401).json({
+                error: 'Unauthorized'
+            })
+        }
+
+        const { oldPassword, newPassword } = req.body
+
+        await auth.api.updatePassword({
+            body: {
+                user
+            }
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            error: err.message
+        })
+    }
 }
 
 export const me = async (req, res, next) => {
