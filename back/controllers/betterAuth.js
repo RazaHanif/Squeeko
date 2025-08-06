@@ -113,6 +113,10 @@ export const signOut = async (req, res, next) => {
     }
 }
 
+export const updateName = async (req, res, next) => {
+    
+}
+
 export const me = async (req, res, next) => {
     try {
         const session = await auth.api.getSession({ req })
