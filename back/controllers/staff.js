@@ -6,24 +6,24 @@ import { validateName, validatePhone, validateEmail } from '../utils/validate'
 // Get all staff for a given center
 export const getAllStaff = async (req, res, next) => {
     try {
-        const centerId = req.body.centerId
+        const { center_id } = req.body
 
-        if (!centerId) {
+        if (!center_id) {
             return res.status(400).json({
                 error: 'Invalid Center ID'
             })
         }
 
-        const staff = prisma.staff.findMany({
+        const staff = await prisma.staff.findMany({
             where: {
-                centerId: centerId
+                center_id: center_id
             },
             select: staffSafeSelect
         })
 
-        if (!staff) {
+        if (staff.length === 0) {
             return res.status(404).json({
-                error: `No staff found for center ${centerId}`
+                error: `No staff found for center ${ center_id }`
             })
         }
 

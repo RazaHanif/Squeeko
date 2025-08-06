@@ -1,12 +1,12 @@
 export const staffSafeSelect = {
   id: true,
-  firstName: true,
-  lastName: true,
-  email: true,
-  cprRenewalDate: true,
-  eceLicenseExpiryDate: true,
-  tbTestDate: true,
-  vaccinesList: true,
-  policeRecordCheckDate: true,
-  offenseDeclarationDate: true
+  address: true,
+  phone_number: true,
+  position: true,         
+  cpr_date: true,                 
+  ece_date: true,                 
+  tb_date: true,                  
+  police_check_date: true,        
+  offense_declaration_dat: true
 };
+
