@@ -2,12 +2,6 @@ import prisma from '../db/prisma'
 import { staffSafeSelect } from '../utils/prismaSelects'
 import { validateName, validatePhone, validateEmail } from '../utils/validate'
 
-import config from '../config/index'
-
-/* 
-    CHANGE ALL UPDATE, READ, DELETE FUNCS TO TRY/CATCH
-*/
-
 
 // Get all staff for a given center
 export const getAllStaff = async (req, res, next) => {
