@@ -97,9 +97,38 @@ export const signIn = async (req, res, next) => {
 
         res.status(200).json({ session })
     } catch (err) {
+        console.log(err)
+        res.status(401).json({
+            error: 'Invalid email or password'
+        })
+    }
+}
+
+export const me = async (req, res, next) => {
+    try {
+        const session = await auth.api.getSession({ req })
+        if (!session) {
+            return res.status(401).json({
+                error: 'Unauthorized'
+            })
+        }
+
+        const user = await prisma.user.findUnique({
+            where: {
+                id: session.user.id
+            },
+            include: {
+                parent: true,
+                staff: true
+            }
+        })
+
+        res.status(200).json({ user })
+        
+    } catch (err) {
         res.status(500).json({
             error: err.message
         })
+        
     }
-
 }
