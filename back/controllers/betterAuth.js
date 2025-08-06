@@ -9,7 +9,7 @@ import config from '../config/index'
 
 export const signUp = async (req, res, next) => {
     try {
-        const { email, password, name, centerId, role, address, phoneNumber } = req.body
+        const { email, password, first_name, middle_name, last_name, center_id, role, address, phone_number } = req.body
 
         // Validate Email
         const checkEmail = validateEmail(email)
@@ -21,7 +21,7 @@ export const signUp = async (req, res, next) => {
         }
 
         // Might be overkill for name checking
-        if (!validateName(name)) {
+        if (!validateName(first_name) || !validateName(last_name) || !validateName(middle_name)) {
             return res.status(400).json({
                 error: 'Invalid Name'
             })
@@ -39,8 +39,8 @@ export const signUp = async (req, res, next) => {
         if (role === 'PARENT') {
             await prisma.parent.create({
                 data: {
-                    userId: user.id,
-                    centerId
+                    user_id: user.id,
+                    center_id: centerId
                 }
             })
         }
