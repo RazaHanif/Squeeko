@@ -8,8 +8,178 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-
 model User {
-  id String @id @default(cuid())
+  id         String  @id @default(cuid())
+  email      String  @unique
+  firstName  String
+  middleName String?
+  lastName   String
+  role       Role
 
+  parent Parent?
+  staff  Staff?
+  Center Center[]
+}
+
+model Center {
+  id           String @id @default(cuid())
+  name         String
+  address      String
+  phoneNumber  String
+  email        String
+  supervisor   User   @relation(fields: [supervisorId], references: [id])
+  supervisorId String
+
+  parents          Parent[]
+  staff            Staff[]
+  children         Child[]
+  attendances      Attendance[]
+  billings         Billing[]
+  ChildMedicalInfo ChildMedicalInfo[]
+  ChildConsent     ChildConsent[]
+}
+
+model Parent {
+  id                   String    @id @default(cuid())
+  address              String
+  phoneNumber          String
+  alternatePhoneNumber String?
+  employer             String?
+  center               Center    @relation(fields: [centerId], references: [id])
+  centerId             String
+  user                 User      @relation(fields: [userId], references: [id])
+  userId               String    @unique
+  children             Child[]
+  billings             Billing[]
+}
+
+model Staff {
+  id                     String    @id @default(cuid())
+  address                String
+  phoneNumber            String
+  position               Position
+  cprDate                DateTime?
+  eceDate                DateTime?
+  tbDate                 DateTime?
+  policeCheckDate        DateTime?
+  offenseDeclarationDate DateTime?
+  center                 Center    @relation(fields: [centerId], references: [id])
+  centerId               String
+  user                   User      @relation(fields: [userId], references: [id])
+  userId                 String    @unique
+}
+
+model Child {
+  id                String             @id @default(cuid())
+  firstName         String
+  middleName        String?
+  lastName          String
+  preferredName     String?
+  dob               DateTime
+  sex               ChildSex
+  center            Center             @relation(fields: [centerId], references: [id])
+  centerId          String
+  parents           Parent[]
+  emergencyContacts EmergencyContact[]
+  medicalInfo       ChildMedicalInfo?
+  consents          ChildConsent[]
+  attendances       Attendance[]
+}
+
+model EmergencyContact {
+  id          String @id @default(cuid())
+  name        String
+  phoneNumber String
+  relation    String
+  child       Child  @relation(fields: [childId], references: [id])
+  childId     String
+}
+
+model ChildMedicalInfo {
+  id                        String                     @id @default(cuid())
+  child                     Child                      @relation(fields: [childId], references: [id])
+  childId                   String                     @unique
+  center                    Center                     @relation(fields: [centerId], references: [id])
+  centerId                  String
+  immunizationRecordUrl     String?
+  immunizationExemption     ImmunizationExemptionType?
+  communicableDiseases      String?
+  medicalNeeds              String?
+  medicalDevices            String?
+  medicalDeviceInstructions String?
+  allergies                 Json?
+  lifeThreateningAllergies  Json?
+  dietaryReq                Json?
+  isInDiapers               Boolean
+  toileting                 ToiletingSupportLevel
+}
+
+model ChildConsent {
+  id                             String   @id @default(cuid())
+  center                         Center   @relation(fields: [centerId], references: [id])
+  centerId                       String
+  child                          Child    @relation(fields: [childId], references: [id])
+  childId                        String
+  updatedAt                      DateTime @updatedAt
+  photoConsent                   Boolean
+  sunscreenConsent               Boolean
+  lotionConsent                  Boolean
+  lipBalmConsent                 Boolean
+  diaperRashCreamConsent         Boolean
+  handSanitizerConsent           Boolean
+  nonPrescriptionMedicineConsent Boolean
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  center    Center   @relation(fields: [centerId], references: [id])
+  centerId  String
+  child     Child    @relation(fields: [childId], references: [id])
+  childId   String
+  date      DateTime
+  isPresent Boolean
+  notes     String?
+}
+
+model Billing {
+  id          String   @id @default(cuid())
+  center      Center   @relation(fields: [centerId], references: [id])
+  centerId    String
+  parent      Parent   @relation(fields: [parentId], references: [id])
+  parentId    String
+  amount      Float
+  description String?
+  dueDate     DateTime
+  paid        Boolean  @default(false)
+  stripeId    String?
+}
+
+enum Role {
+  STAFF
+  SUPERVISOR
+  PARENT
+  SUPERUSER
+}
+
+enum Position {
+  TEACHER
+  ASSISTANT
+  ADMIN
+}
+
+enum ChildSex {
+  MALE
+  FEMALE
+}
+
+enum ImmunizationExemptionType {
+  MEDICAL
+  RELIGIOUS
+  CONSCIENCE
+}
+
+enum ToiletingSupportLevel {
+  INDEPENDENT
+  ASSISTED
+  FULL_SUPPORT
 }
