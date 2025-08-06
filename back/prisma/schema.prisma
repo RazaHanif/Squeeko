@@ -49,6 +49,7 @@ model Parent {
   center_id        String
   user             User      @relation(fields: [user_id], references: [id])
   user_id          String    @unique
+
   children         Child[]
   billings         Billing[]
 }
@@ -79,6 +80,7 @@ model Child {
   sex                ChildSex
   center             Center             @relation(fields: [center_id], references: [id])
   center_id          String
+  
   parents            Parent[]
   emergency_contacts EmergencyContact[]
   medical_info       ChildMedicalInfo?
