@@ -39,7 +39,8 @@ export const signUp = async (req, res, next) => {
         if (role === 'PARENT') {
             await prisma.parent.create({
                 data: {
-                    
+                    userId: user.id,
+                    centerId
                 }
             })
         }
