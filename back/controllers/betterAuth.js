@@ -167,6 +167,36 @@ export const updatePassword = async (req, res, next) => {
     }
 }
 
+// Just for mvp this is locked to superuser 
+// Will create proper email link to reset later
+export const adminResetPassword = async (req, res, next) => {
+    try {
+        const session = await auth.api.getSession({ req })
+        if (!session || session.user.role !== 'SUPERUSER') {
+            return res.status(403).json({
+                error: 'Forbidden'
+            })
+        }
+    
+        const { user_id, new_password } = req.body
+    
+        await auth.api.updatePassword({
+            body: {
+                user_id,
+                newPassword: new_password
+            }
+        })
+    
+        res.status(200).json({
+            message: 'Password reset succesful'
+        })
+    } catch (err) {
+        res.status(400).json({
+            error: err.message
+        })
+    }
+}
+
 export const me = async (req, res, next) => {
     try {
         const session = await auth.api.getSession({ req })
