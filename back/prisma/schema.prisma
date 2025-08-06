@@ -18,6 +18,7 @@ model User {
 
   parent Parent?
   staff  Staff?
+  
   Center Center[]
 }
 
@@ -80,7 +81,7 @@ model Child {
   sex                ChildSex
   center             Center             @relation(fields: [center_id], references: [id])
   center_id          String
-  
+
   parents            Parent[]
   emergency_contacts EmergencyContact[]
   medical_info       ChildMedicalInfo?
