@@ -1,10 +1,6 @@
-import jwt from 'jsonwebtoken'
-import { JsonWebTokenError } from 'jsonwebtoken'
 import { prisma }from '../db/prisma'
-import bcrypt from 'bcrypt'
 import { validateDateTime, validateEmail, validateName, validatePhone } from '../utils/validate'
 import { auth } from '../auth'
-
 import config from '../config/index'
 
 export const signUp = async (req, res, next) => {
