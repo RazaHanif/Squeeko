@@ -118,7 +118,23 @@ export const updateStaffPhoneNumberById = async (req, res, next) => {
 // Change all staff data
 export const updateStaffById = async (req, res, next) => {
     try {
-        
+        const session = await auth.api.getSession({ req })
+        if (!session || session.user.role !== 'SUPERUSER') {
+            return res.status(403).json({
+                error: 'Forbidden'
+            })
+        }
+
+        const staff_id = parseInt(req.body.staff_id)
+
+        if (isNaN(staff_id)) {
+            return res.status(400).json({
+                error: 'Invalid Staff ID'
+            })
+        }
+
+        const { address, phone_number, position, cpr_date, ece_date, tb_date, police_check_date, offense_declaration_date } = req.body
+
     } catch (err) {
         return res.status(500).json({
             error: err
