@@ -48,12 +48,20 @@ export const getInvoiceByID = async (req, res, next) => {
             }
         })
 
-        
+        if (!invoice) {
+            return res.status(404).json({
+                error: `No invoice found with id ${invoice_id}`
+            })
+        }
+
+        res.status(200).json({
+            invoice
+        })
     
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -63,11 +71,28 @@ export const getInvoiceByID = async (req, res, next) => {
 // Get all invoices for a parent
 export const getAllInvoicesForParentId = async (req, res, next) => {
     try {
+        const parent_id = req.body.parent_id
+
+        const invoices = await prisma.billing.findUnique({
+            where: {
+                id: parent_id
+            }
+        })
+
+        if (invoices.length === 0) {
+            return res.status(404).json({
+                error: `No invoices found with for parent id ${parent_id}`
+            })
+        }
+
+        res.status(200).json({
+            invoices
+        })
     
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -75,11 +100,11 @@ export const getAllInvoicesForParentId = async (req, res, next) => {
 // Create new invoices
 export const createNewInvoice = async (req, res, next) => {
     try {
-    
+        
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -92,7 +117,7 @@ export const getAllInvoiceHistory = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -104,7 +129,7 @@ export const getAllInvoiceHistoryForParentId = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -116,7 +141,7 @@ export const makePayment = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -128,7 +153,7 @@ export const makeRecurringPayment = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -141,7 +166,7 @@ export const getStripeIdForParentId = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -154,7 +179,7 @@ export const stripeWebhook = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }

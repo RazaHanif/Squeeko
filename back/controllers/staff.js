@@ -1,7 +1,7 @@
 import prisma from '../db/prisma'
 import { staffSafeSelect } from '../utils/prismaSelects'
 import { validateName, validatePhone, validateEmail } from '../utils/validate'
-
+const { Position } = require('@prisma/client')
 
 // Get all staff for a given center
 export const getAllStaff = async (req, res, next) => {
@@ -149,6 +149,12 @@ export const updateStaffById = async (req, res, next) => {
         if (input.phone_number && input.phone_number !== current.phone_number) {
             if (!validatePhone(input.phone_number))
             updates.phone_number = input.phone_number
+        }
+
+        if (!Object.values(Position).includes(input.position)) {
+            return res.status(400).json({
+                error: 'Invalid Position'
+            })
         }
 
         if (input.position && input.position !== current.position) {
