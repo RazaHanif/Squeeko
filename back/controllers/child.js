@@ -103,6 +103,21 @@ export const updateChildById = async (req, res, next) => {
         if (input.dob && new Date(input.dob).toISOString() !== current.dob.toISOString()) {
             updates.dob = new Date(input.dob)
         }
+        
+        
+        if (input.center_id && input.center_id !== current.center_id) {
+            const exists = await prisma.center.findUnique({
+                where: {
+                    id: input.center_id
+                }
+            })
+            if (!exists) {
+                return res.status(400).json({
+                    error: 'Invalid Center ID'
+                })
+            }
+            updates.center_id = input.center_id
+        }
 
         if (!Object.values(ChildSex).includes(input.gender)) {
             return res.status(400).json({
@@ -156,7 +171,15 @@ export const deleteChildById = async (req, res, next) => {
             })
         }
 
-        
+        const deletedChild = await prisma.child.delete({
+            where: {
+                id: child_id
+            }
+        })
+
+        return res.status(200).json({
+            deletedChild
+        })
 
     } catch (err) {
         console.log(err)

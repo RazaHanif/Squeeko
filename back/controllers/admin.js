@@ -9,7 +9,7 @@ export const stats = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
@@ -21,7 +21,18 @@ export const settings = async (req, res, next) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
+    }
+}
+
+// Create center
+export const createCenter = async (req, res, next) => {
+    try {
+        // Literally logic to create a center
+        // But also add Stripe Billing Logic
+        // ....oh i might need to rework the db to include Billing info too, yikes
+    } catch (err) {
+        
     }
 }
