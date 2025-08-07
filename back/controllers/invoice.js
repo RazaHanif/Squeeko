@@ -13,7 +13,7 @@ export const getAllInvoices = async (req, res, next) => {
             })
         }
 
-        const invoices = await prisma.billing.findMany({
+        const invoices = await prisma.invoice.findMany({
             where: {
                 center_id: center_id
             },
@@ -42,7 +42,7 @@ export const getInvoiceByID = async (req, res, next) => {
     try {
         const invoice_id = req.body.invoice_id
 
-        const invoice = await prisma.billing.findUnique({
+        const invoice = await prisma.invoice.findUnique({
             where: {
                 id: invoice_id
             }
@@ -73,7 +73,7 @@ export const getAllInvoicesForParentId = async (req, res, next) => {
     try {
         const parent_id = req.body.parent_id
 
-        const invoices = await prisma.billing.findUnique({
+        const invoices = await prisma.invoice.findUnique({
             where: {
                 id: parent_id
             }
@@ -98,9 +98,16 @@ export const getAllInvoicesForParentId = async (req, res, next) => {
 }
 
 // Create new invoices
+// Will need to come back to this when doing stripe integration
 export const createNewInvoice = async (req, res, next) => {
     try {
-        
+        const { center_id, parent_id, amount, description, due_date } = req.body
+
+        // Validate each of the vars
+
+        // Create Stripe PaymentIntent
+
+        // Return success
     } catch (err) {
         console.log(err)
         return res.status(500).json({
@@ -108,6 +115,9 @@ export const createNewInvoice = async (req, res, next) => {
         })
     }
 }
+
+// Make payment
+
 
 
 // Get all invoice history for center

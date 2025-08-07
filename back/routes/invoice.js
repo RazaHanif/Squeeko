@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createNewInvoice, getAllInvoiceHistory, getAllInvoices, getAllInvoicesForParentId, getInvoiceByID, getStripeIdForParentId, makePayment, stripeWebhook } from '../controllers/billing';
+import { createNewInvoice, getAllInvoiceHistory, getAllInvoices, getAllInvoicesForParentId, getInvoiceByID, getStripeIdForParentId, makePayment, stripeWebhook } from '../controllers/invoice';
 
 const router = Router();
 
