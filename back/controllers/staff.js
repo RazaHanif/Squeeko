@@ -28,7 +28,7 @@ export const getAllStaff = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            staff: staff
+            staff
         })
     
     } catch (err) {
@@ -42,18 +42,9 @@ export const getAllStaff = async (req, res, next) => {
 // Get a specific staff by staff.id
 export const getStaffById = async (req, res, next) => {
     try {
-        let staffId = req.params.staffId
+        const staff_id = parseInt(req.body.staff_id)
 
-        try {
-            staffId = parseInt(staffId)
-        } catch (error) {
-            console.log(error)
-            return res.status(400).json({
-                error: 'Invalid Staff ID'
-            })
-        }
-
-        if (!staffId) {
+        if (isNaN(staff_id)) {
             return res.status(400).json({
                 error: 'Invalid Staff ID'
             })
@@ -61,19 +52,19 @@ export const getStaffById = async (req, res, next) => {
 
         const staff = await prisma.staff.findUnique({
             where: {
-                id: staffId
+                id: staff_id
             },
             select: staffSafeSelect
         })
 
         if (!staff) {
             return res.status(404).json({
-                error: `No staff found with id ${staffId}`
+                error: `No staff found with id ${staff_id}`
             })
         }
 
         return res.status(200).json({
-            staff: staff
+            staff
         })
 
     } catch (err) {
@@ -84,43 +75,16 @@ export const getStaffById = async (req, res, next) => {
     }
 }
 
-// Update a specific staff by staff.id
-// Can only update, firstName, lastName, email, phoneNumber
-
-// Will make seperate funcs for each renewal / expiry date
-export const updateStaffById = async (req, res, next) => {
+// Update current user phone number
+// Can only update phone number from here everything else is admin only
+export const updateStaffPhoneNumberById = async (req, res, next) => {
     try {
-        let staffId = req.params.staffId
+        const session = await auth.api.getSession({ req })
+        if (!session) return res.status(401).json({
+            error: 'Unauthorized'
+        })
 
-        try {
-            staffId = parseInt(staffId)
-        } catch (error) {
-            console.log(error)
-            return res.status(400).json({
-                error: 'Invalid Staff ID'
-            })
-        }
-
-        if (!staffId) {
-            return res.status(400).json({
-                error: 'Invalid Staff ID'
-            })
-        }
-
-        // Should somehow validate the info (i guess)
-        const { firstName, lastName, email, phoneNumber } = req.body
-
-        if (!validateName(firstName) || !validateName(lastName)) {
-            return res.status(400).json({
-                error: 'Invalid Name'
-            })
-        }
-
-        if (!validateEmail(email)) {
-            return res.status(400).json({
-                error: 'Invalid Email'
-            })
-        }
+        const { phone_number } = req.body
 
         if (!validatePhone(phoneNumber)) {
             return res.status(400).json({
@@ -130,22 +94,13 @@ export const updateStaffById = async (req, res, next) => {
 
         const updateStaff = prisma.staff.update({
             where: {
-                id: staffId
+                id: session.user.id
             },
             data: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                phoneNumber: phoneNumber
+                phone_number: phone_number
             },
             select: staffSafeSelect
         })
-
-        if (!updateStaff) {
-            return res.status(404).json({
-                error: 'tbh idk, error updating'
-            })
-        }
 
         return res.status(200).json({
             staff: updateStaff
@@ -159,21 +114,24 @@ export const updateStaffById = async (req, res, next) => {
     }
 }
 
+// Protected route only accesible by supervisor
+// Change all staff data
+export const updateStaffById = async (req, res, next) => {
+    try {
+        
+    } catch (err) {
+        return res.status(500).json({
+            error: err
+        })
+    }
+}
+
 // Delete a specific staff by staff.id
 export const deleteStaffById = async (req, res, next) => {
     try {
-        let staffId = req.params.staffId
+        const staff_id = parseInt(req.body.staff_id)
 
-        try {
-            staffId = parseInt(staffId)
-        } catch (error) {
-            console.log(error)
-            return res.status(400).json({
-                error: 'Invalid Staff ID'
-            })
-        }
-
-        if (!staffId) {
+        if (isNaN(staff_id)) {
             return res.status(400).json({
                 error: 'Invalid Staff ID'
             })
@@ -181,18 +139,18 @@ export const deleteStaffById = async (req, res, next) => {
 
         const deleteStaff = await prisma.staff.delete({
             where: {
-                id: staffId
+                id: staff_id
             }
         })
 
         if (!deleteStaff) {
             return res.status(404).json({
-                error: `No staff found with id ${staffId}`
+                error: `No staff found with id ${staff_id}`
             })
         }
 
         return res.status(200).json({
-            message: `Staff with id ${staffId} has been deleted`
+            message: `Staff with id ${staff_id} has been deleted`
         })
 
     } catch (err) {

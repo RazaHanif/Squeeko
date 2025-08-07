@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { getAllStaff, getStaffById, updateStaffById, deleteStaffById } from '../controllers/staff.js';
+import { getAllStaff, getStaffById, updateStaffPhoneNumberById, deleteStaffById } from '../controllers/staff.js';
 
 
 const router = Router();
 
 router.get('/staff', getAllStaff)
-router.get('/staff/:id', getStaffById)
-router.put('/staff/:id', updateStaffById)
-router.delete('/staff/:id', deleteStaffById)
+router.get('/this_staff', getStaffById)
+router.put('/this_staff', updateStaffPhoneNumberById)
+router.delete('/this_staff/', deleteStaffById)
 
 export default router;
