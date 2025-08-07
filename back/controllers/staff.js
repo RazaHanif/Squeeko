@@ -182,14 +182,20 @@ export const updateStaffById = async (req, res, next) => {
         }
 
         if (Object.keys(updates).length > 0) {
-            await prisma.staff.update({
+            const updateStaff = await prisma.staff.update({
                 where: {
                     id: staff_id
                 },
                 data: updates,
             })
+
+            return res.status(200).json({
+                staff: updateStaff
+            })
         } else {
-            console.log('No updates needed')
+            return res.status(200).json({
+                message: 'No changes made'
+            })
         }
 
     } catch (err) {
