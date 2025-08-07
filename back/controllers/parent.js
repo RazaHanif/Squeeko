@@ -5,6 +5,9 @@ import config from '../config/index'
 // Get all parents for a given center
 export const getAllParents = async (req, res, next) => {
     try {
+        const { center_id } = req.body
+
+        
     
     } catch (err) {
         console.log(err)

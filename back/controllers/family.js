@@ -15,7 +15,7 @@ export const intake = async (req, res, next) => {
 
 export const assignChildrenToParentById = async (req, res, next) => {
     try {
-        // add children to a parent
+        // add child/children [] to a parents model
     } catch (err) {
         return res.status(500).json({
             error: err
