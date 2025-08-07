@@ -13,12 +13,12 @@ export const intake = async (req, res, next) => {
 }
 
 
-export const assignChildrenToParentById = async (req, res, next_ => {
+export const assignChildrenToParentById = async (req, res, next) => {
     try {
-        
+        // add children to a parent
     } catch (err) {
         return res.status(500).json({
             error: err
         })        
     }
-})
+}
