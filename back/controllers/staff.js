@@ -133,14 +133,11 @@ export const updateStaffById = async (req, res, next) => {
             })
         }
 
-        const { address, phone_number, position, cpr_date, ece_date, tb_date, police_check_date, offense_declaration_date } = req.body
-
         const current = await prisma.staff.findUnique({
             where: {
                 id: staff_id
             }
         })
-
 
         const updates = {}
         const input = req.body
@@ -158,7 +155,7 @@ export const updateStaffById = async (req, res, next) => {
             updates.position = input.position
         }
 
-        
+
 
 
     } catch (err) {
