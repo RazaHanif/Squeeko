@@ -135,6 +135,8 @@ export const updateStaffById = async (req, res, next) => {
 
         const { address, phone_number, position, cpr_date, ece_date, tb_date, police_check_date, offense_declaration_date } = req.body
 
+        
+
     } catch (err) {
         return res.status(500).json({
             error: err
