@@ -23,14 +23,14 @@ model User {
 }
 
 model Center {
-  id            String @id @default(cuid())
+  id            String  @id @default(cuid())
   name          String
   address       String
   phone_number  String
   email         String
-  supervisor    User   @relation(fields: [supervisor_id], references: [id])
+  supervisor    User    @relation(fields: [supervisor_id], references: [id])
   supervisor_id String
-  stripe_id String?
+  stripe_id     String?
 
   parents            Parent[]
   staff              Staff[]
@@ -74,14 +74,14 @@ model Staff {
 }
 
 model Child {
-  id             String   @id @default(cuid())
+  id             String      @id @default(cuid())
   first_name     String
   middle_name    String?
   last_name      String
   preferred_name String?
   dob            DateTime
-  sex            ChildSex
-  center         Center   @relation(fields: [center_id], references: [id])
+  gender         ChildGender
+  center         Center      @relation(fields: [center_id], references: [id])
   center_id      String
 
   parents            Parent[]
@@ -172,7 +172,7 @@ enum Position {
   ADMIN
 }
 
-enum ChildSex {
+enum ChildGender {
   MALE
   FEMALE
 }

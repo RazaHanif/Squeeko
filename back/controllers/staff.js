@@ -182,7 +182,7 @@ export const updateStaffById = async (req, res, next) => {
         }
 
         if (Object.keys(updates).length > 0) {
-            const updateStaff = await prisma.staff.update({
+            const updatedStaff = await prisma.staff.update({
                 where: {
                     id: staff_id
                 },
@@ -190,7 +190,7 @@ export const updateStaffById = async (req, res, next) => {
             })
 
             return res.status(200).json({
-                staff: updateStaff
+                staff: updatedStaff
             })
         } else {
             return res.status(200).json({
