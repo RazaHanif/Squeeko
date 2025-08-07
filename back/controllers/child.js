@@ -141,7 +141,23 @@ export const updateChildById = async (req, res, next) => {
 // Delete a specific child by id
 export const deleteChildById = async (req, res, next) => {
     try {
-    
+        const session = await auth.api.getSession({ req })
+        if (!session || session.user.role !== 'SUPERUSER') {
+            return res.status(403).json({
+                error: 'Forbidden'
+            })
+        }
+
+        const { child_id } = req.body
+
+        if (!child_id) {
+            return res.status(400).json({
+                error: 'Invalid Child ID'
+            })
+        }
+
+        
+
     } catch (err) {
         console.log(err)
         return res.status(500).json({
