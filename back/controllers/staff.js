@@ -183,7 +183,7 @@ export const updateStaffById = async (req, res, next) => {
                 data: updates,
             })
         } else {
-            
+            console.log('No updates needed')
         }
 
 
