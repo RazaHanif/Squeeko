@@ -42,9 +42,9 @@ export const getAllStaff = async (req, res, next) => {
 // Get a specific staff by staff.id
 export const getStaffById = async (req, res, next) => {
     try {
-        const staff_id = parseInt(req.body.staff_id)
+        const staff_id = (req.body.staff_id)
 
-        if (isNaN(staff_id)) {
+        if (!staff_id) {
             return res.status(400).json({
                 error: 'Invalid Staff ID'
             })
@@ -125,9 +125,9 @@ export const updateStaffById = async (req, res, next) => {
             })
         }
 
-        const staff_id = parseInt(req.body.staff_id)
+        const staff_id = (req.body.staff_id)
 
-        if (isNaN(staff_id)) {
+        if (!staff_id) {
             return res.status(400).json({
                 error: 'Invalid Staff ID'
             })
@@ -196,9 +196,9 @@ export const updateStaffById = async (req, res, next) => {
 // Delete a specific staff by staff.id
 export const deleteStaffById = async (req, res, next) => {
     try {
-        const staff_id = parseInt(req.body.staff_id)
+        const staff_id = (req.body.staff_id)
 
-        if (isNaN(staff_id)) {
+        if (!staff_id) {
             return res.status(400).json({
                 error: 'Invalid Staff ID'
             })
