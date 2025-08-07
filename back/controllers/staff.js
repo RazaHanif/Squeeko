@@ -186,7 +186,6 @@ export const updateStaffById = async (req, res, next) => {
             console.log('No updates needed')
         }
 
-
     } catch (err) {
         return res.status(500).json({
             error: err
