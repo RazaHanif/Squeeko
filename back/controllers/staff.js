@@ -150,8 +150,15 @@ export const updateStaffById = async (req, res, next) => {
         }
 
         if (input.phone_number && input.phone_number !== current.phone_number) {
-            
+            if (!validatePhone(input.phone_number))
+            updates.phone_number = input.phone_number
         }
+
+        if (input.position && input.position !== current.position) {
+            updates.position = input.position
+        }
+
+        
 
 
     } catch (err) {
