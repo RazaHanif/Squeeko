@@ -155,7 +155,36 @@ export const updateStaffById = async (req, res, next) => {
             updates.position = input.position
         }
 
+        if (input.cpr_date && new Date(input.cpr_date).toISOString() !== current.cpr_date.toISOString()) {
+            updates.cpr_date = new Date(input.cpr_date)
+        }
 
+        if (input.ece_date && new Date(input.ece_date).toISOString() !== current.ece_date.toISOString()) {
+            updates.ece_date = new Date(input.ece_date)
+        }
+
+        if (input.tb_date && new Date(input.tb_date).toISOString() !== current.tb_date.toISOString()) {
+            updates.tb_date = new Date(input.tb_date)
+        }
+
+        if (input.police_check_date && new Date(input.police_check_date).toISOString() !== current.police_check_date.toISOString()) {
+            updates.police_check_date = new Date(input.police_check_date)
+        }
+
+        if (input.offense_declaration_date && new Date(input.offense_declaration_date).toISOString() !== current.offense_declaration_date.toISOString()) {
+            updates.offense_declaration_date = new Date(input.offense_declaration_date)
+        }
+
+        if (Object.keys(updates).length > 0) {
+            await prisma.staff.update({
+                where: {
+                    id: staff_id
+                },
+                data: updates,
+            })
+        } else {
+            
+        }
 
 
     } catch (err) {
