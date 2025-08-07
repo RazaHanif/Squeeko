@@ -142,7 +142,16 @@ export const updateStaffById = async (req, res, next) => {
         })
 
 
-        
+        const updates = {}
+        const input = req.body
+
+        if (input.address && input.address !== current.address) {
+            updates.address = input.address
+        }
+
+        if (input.phone_number && input.phone_number !== current.phone_number) {
+            
+        }
 
 
     } catch (err) {
