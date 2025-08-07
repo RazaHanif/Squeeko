@@ -18,7 +18,7 @@ model User {
 
   parent Parent?
   staff  Staff?
-  
+
   Center Center[]
 }
 
@@ -30,29 +30,31 @@ model Center {
   email         String
   supervisor    User   @relation(fields: [supervisor_id], references: [id])
   supervisor_id String
+  stripe_id String?
 
   parents            Parent[]
   staff              Staff[]
   children           Child[]
   attendances        Attendance[]
-  billings           Billing[]
+  invoices           Invoice[]
   child_medical_info ChildMedicalInfo[]
   child_consent      ChildConsent[]
 }
 
 model Parent {
-  id               String    @id @default(cuid())
+  id               String  @id @default(cuid())
   address          String
   phone_number     String
   alt_phone_number String?
   employer         String?
-  center           Center    @relation(fields: [center_id], references: [id])
+  center           Center  @relation(fields: [center_id], references: [id])
   center_id        String
-  user             User      @relation(fields: [user_id], references: [id])
-  user_id          String    @unique
+  user             User    @relation(fields: [user_id], references: [id])
+  user_id          String  @unique
+  stripe_id        String?
 
-  children         Child[]
-  billings         Billing[]
+  children Child[]
+  invoices Invoice[]
 }
 
 model Staff {
@@ -72,15 +74,15 @@ model Staff {
 }
 
 model Child {
-  id                 String             @id @default(cuid())
-  first_name         String
-  middle_name        String?
-  last_name          String
-  preferred_name     String?
-  dob                DateTime
-  sex                ChildSex
-  center             Center             @relation(fields: [center_id], references: [id])
-  center_id          String
+  id             String   @id @default(cuid())
+  first_name     String
+  middle_name    String?
+  last_name      String
+  preferred_name String?
+  dob            DateTime
+  sex            ChildSex
+  center         Center   @relation(fields: [center_id], references: [id])
+  center_id      String
 
   parents            Parent[]
   emergency_contacts EmergencyContact[]
@@ -144,7 +146,7 @@ model Attendance {
   notes      String?
 }
 
-model Billing {
+model Invoice {
   id          String   @id @default(cuid())
   center      Center   @relation(fields: [center_id], references: [id])
   center_id   String
