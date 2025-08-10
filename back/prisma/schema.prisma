@@ -16,10 +16,14 @@ model User {
   last_name   String
   role        Role
 
+  sentMessages     Message[]
+  receivedMessages Message[]
+
   parent Parent?
   staff  Staff?
 
-  Center Center[]
+  Center  Center[]
+  Message Message[]
 }
 
 model Center {
@@ -157,6 +161,17 @@ model Invoice {
   due_date    DateTime
   paid        Boolean  @default(false)
   stripe_id   String?
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  sender      User     @relation(fields: [sender_id], references: [id])
+  sender_id   String
+  receiver    User     @relation(fields: [receiver_id], references: [id])
+  receiver_id String
+  content     String?
+  image_url   String?
+  created_at  DateTime @default(now())
 }
 
 enum Role {
