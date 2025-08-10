@@ -2,19 +2,6 @@ import prisma from '../db/prisma'
 import { supabase } from "@supabase/supabase-js"
 import { v4 as uuidv4 } from 'uuid'
 
-/* 
-model Message {
-  id          String   @id @default(cuid())
-  sender      User     @relation("SentMessages", fields: [sender_id], references: [id])
-  sender_id   String
-  receiver    User     @relation("ReceivedMessages", fields: [receiver_id], references: [id])
-  receiver_id String
-  content     String?
-  image_url   String?
-  created_at  DateTime @default(now())
-}
-*/
-
 // Send a message
 export const sendMessageOffline = async (req, res, next) => {
     try {
