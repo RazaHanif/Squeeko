@@ -7,11 +7,16 @@ Create seperate funcs for each form type and run through making the form automat
 */
 export const form  = async (req, res, next) => {
     try {
-    
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -19,11 +24,16 @@ export const form  = async (req, res, next) => {
 // View all forms for given child id
 export const getAllFormsForChild  = async (req, res, next) => {
     try {
-    
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }

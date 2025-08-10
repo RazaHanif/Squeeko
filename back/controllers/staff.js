@@ -1,6 +1,6 @@
 import prisma from '../db/prisma'
 import { staffSafeSelect } from '../utils/prismaSelects'
-import { validateName, validatePhone, validateEmail } from '../utils/validate'
+import { validatePhone } from '../utils/validate'
 const { Position } = require('@prisma/client')
 
 // Get all staff for a given center
@@ -28,13 +28,15 @@ export const getAllStaff = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            staff
+            success: true,
+            data: { staff },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -62,15 +64,17 @@ export const getStaffById = async (req, res, next) => {
                 error: `No staff found with id ${staff_id}`
             })
         }
-
+        
         return res.status(200).json({
-            staff
+            success: true,
+            data: { staff },
+            error: null
         })
-
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -92,7 +96,7 @@ export const updateStaffPhoneNumberById = async (req, res, next) => {
             })
         }
 
-        const updateStaff = prisma.staff.update({
+        const updatedStaff = prisma.staff.update({
             where: {
                 id: session.user.id
             },
@@ -103,13 +107,15 @@ export const updateStaffPhoneNumberById = async (req, res, next) => {
         })
 
         return res.status(200).json({
-            staff: updateStaff
+            success: true,
+            data: { updatedStaff },
+            error: null
         })
-
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -190,20 +196,26 @@ export const updateStaffById = async (req, res, next) => {
             })
 
             return res.status(200).json({
-                staff: updatedStaff
+                success: true,
+                data: { updatedStaff },
+                error: null
             })
         } else {
             return res.status(200).json({
-                message: 'No changes made'
+                success: true,
+                data: { message: 'No changes made'},
+                error: null
             })
         }
-
     } catch (err) {
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
+
 
 // Delete a specific staff by staff.id
 export const deleteStaffById = async (req, res, next) => {
@@ -216,27 +228,28 @@ export const deleteStaffById = async (req, res, next) => {
             })
         }
 
-        const deleteStaff = await prisma.staff.delete({
+        const deletedStaff = await prisma.staff.delete({
             where: {
                 id: staff_id
             }
         })
 
-        if (!deleteStaff) {
+        if (!deletedStaff) {
             return res.status(404).json({
                 error: `No staff found with id ${staff_id}`
             })
         }
 
         return res.status(200).json({
-            message: `Staff with id ${staff_id} has been deleted`
+            success: true,
+            data: { deletedStaff },
+            error: null
         })
-
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
-

@@ -21,10 +21,16 @@ export const updateDailyLog = async (req, res, next) => {
             default:
                 break;
         }
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -33,10 +39,16 @@ export const updateDailyLog = async (req, res, next) => {
 export const viewDailyLog = async (req, res, next) => {
     try {
     // pull by child id
+    return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -45,10 +57,16 @@ export const viewDailyLog = async (req, res, next) => {
 export const viewDailyLogHistory = async (req, res, next) => {
     try {
         // Pull by child id
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -57,10 +75,16 @@ export const viewDailyLogHistory = async (req, res, next) => {
 export const updateAttendance = async (req, res, next) => {
     try {
     // pull by child id
+    return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -69,11 +93,16 @@ export const updateAttendance = async (req, res, next) => {
 // view all sign ins for today
 export const getAttendanceForToday = async (req, res, next) => {
     try {
-    // pull by child id
+    return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -81,11 +110,16 @@ export const getAttendanceForToday = async (req, res, next) => {
 // view all attendance history
 export const getAllAttendance = async (req, res, next) => {
     try {
-    // pull by child id
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }

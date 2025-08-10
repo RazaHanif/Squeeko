@@ -1,5 +1,4 @@
 import prisma from '../db/prisma'
-import config from '../config/index'
 
 
 // Get all parents for a given center
@@ -20,13 +19,15 @@ export const getAllParents = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            parents
+            success: true,
+            data: { parents },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -49,12 +50,15 @@ export const getParentById = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            parent
+            success: true,
+            data: { parent },
+            error: null
         })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -98,25 +102,30 @@ export const updateParentById = async (req, res, next) => {
         }
 
         if (Object.keys(updates).length > 0) {
-            const updatedParent = await prisma.staff.update({
+            const updatedParent = await prisma.parent.update({
                 where: {
-                    id: staff_id
+                    id: input.parent_id
                 },
                 data: updates,
             })
 
             return res.status(200).json({
-                staff: updatedParent
+                success: true,
+                data: { updatedParent },
+                error: null
             })
         } else {
             return res.status(200).json({
-                message: 'No changes made'
+                success: true,
+                data: { message: 'No changes made' },
+                error: null
             })
         }
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -146,13 +155,15 @@ export const deleteParentById = async (req, res, next) => {
         })
 
         return res.status(200).json({
-            deletedParent
+            success: true,
+            data: { deletedParent },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }

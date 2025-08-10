@@ -21,13 +21,15 @@ export const getAllChildren = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            children
+            success: true,
+            data: { children },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -48,18 +50,21 @@ export const getChildById = async (req, res, next) => {
                 error: `No child found with id ${child_id}`
             })
         }
-
+        
         return res.status(200).json({
-            child
+            success: true,
+            data: { child },
+            error: null
         })
-
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
+
 
 // Update a specific child by id
 export const updateChildById = async (req, res, next) => {
@@ -130,25 +135,30 @@ export const updateChildById = async (req, res, next) => {
         }
 
         if (Object.keys(updates).length > 0) {
-            const updatedParent = await prisma.staff.update({
+            const updatedChild = await prisma.child.update({
                 where: {
-                    id: staff_id
+                    id: input.child_id
                 },
                 data: updates,
             })
 
             return res.status(200).json({
-                staff: updatedParent
+                success: true,
+                data: { updatedChild },
+                error: null
             })
         } else {
             return res.status(200).json({
-                message: 'No changes made'
+                success: true,
+                data: { message: 'No changes made' },
+                error: null
             })
         }
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -176,16 +186,17 @@ export const deleteChildById = async (req, res, next) => {
                 id: child_id
             }
         })
-
+        
         return res.status(200).json({
-            deletedChild
+            success: true,
+            data: { deletedChild },
+            error: null
         })
-
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
-

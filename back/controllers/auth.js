@@ -74,10 +74,16 @@ export const signUp = async (req, res, next) => {
             })
         }
 
-        res.status(201).json({ user })
+        return res.status(200).json({
+            success: true,
+            data: { user },
+            error: null
+        })
     } catch (err) {
-        res.status(500).json({
-            error: err.message
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -90,11 +96,16 @@ export const signIn = async (req, res, next) => {
             body: { email, password}
         })
 
-        res.status(200).json({ session })
+        return res.status(200).json({
+            success: true,
+            data: { session },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
-        res.status(401).json({
-            error: 'Invalid email or password'
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -102,12 +113,17 @@ export const signIn = async (req, res, next) => {
 export const signOut = async (req, res, next) => {
     try {
         await auth.api.signOut({ req })
-        res.status(200).json({
-            message: 'Successfully logged out'
+
+        return res.status(200).json({
+            success: true,
+            data: { message: 'Successfully logged out' },
+            error: null
         })
     } catch (err) {
-        res.status(500).json({
-            error: err.message
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -132,10 +148,16 @@ export const updateName = async (req, res, next) => {
             }
         })
 
-        res.status(200).json({ updatedUser })
+        return res.status(200).json({
+            success: true,
+            data: { updatedUser },
+            error: null
+        })
     } catch (err) {
-        res.status(500).json({
-            error: err.message
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -151,7 +173,7 @@ export const updatePassword = async (req, res, next) => {
 
         const { oldPassword, newPassword } = req.body
 
-        await auth.api.updatePassword({
+        const updatedUser = await auth.api.updatePassword({
             body: {
                 user_id: session.user.id,
                 oldPassword,
@@ -159,9 +181,16 @@ export const updatePassword = async (req, res, next) => {
             }
         })
 
+        return res.status(200).json({
+            success: true,
+            data: { message: 'Password successfully updated' },
+            error: null
+        })
     } catch (err) {
-        res.status(400).json({
-            error: err.message
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -186,12 +215,16 @@ export const adminResetPassword = async (req, res, next) => {
             }
         })
     
-        res.status(200).json({
-            message: 'Password reset succesful'
+        return res.status(200).json({
+            success: true,
+            data: { message: 'Password reset succesful' },
+            error: null
         })
     } catch (err) {
-        res.status(400).json({
-            error: err.message
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -214,13 +247,17 @@ export const me = async (req, res, next) => {
                 staff: true
             }
         })
-
-        res.status(200).json({ user })
         
+        return res.status(200).json({
+            success: true,
+            data: { user },
+            error: null
+        })
     } catch (err) {
-        res.status(500).json({
-            error: err.message
-        })       
+        return res.status(500).json({
+            success: false,
+            data: {},
+            error: { message: err.message }
+        })
     }
 }
-

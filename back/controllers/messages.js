@@ -1,8 +1,6 @@
 import prisma from '../db/prisma'
 import { supabase } from "@supabase/supabase-js"
 import { v4 as uuidv4 } from 'uuid'
-import config from '../config/index'
-
 
 /* 
 model Message {
@@ -38,13 +36,16 @@ export const sendMessageOffline = async (req, res, next) => {
         })
 
         // Should be good?
-        res.status(200).json({
-            message
+        return res.status(200).json({
+            success: true,
+            data: { message },
+            error: null
         })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -74,13 +75,16 @@ export const fetchHistory = async (req, res, next) => {
 
         // Feel like there should be a check to see if it exists
 
-        res.status(200).json({
-            messages
+        return res.status(200).json({
+            success: true,
+            data: { messages },
+            error: null
         })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -115,14 +119,17 @@ export const uploadMedia = async (req, res, next) => {
 
         const { publicUrl } = supabase.storage.from('chat-images').getPublicUrl(filename).data
         
+
         return res.status(200).json({
-            url: publicUrl
+            success: true,
+            data: { url: publicUrl },
+            error: null
         })
-        
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }

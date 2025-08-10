@@ -35,13 +35,15 @@ export const getAllInvoices = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            invoices
+            success: true,
+            data: { invoices },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -63,14 +65,16 @@ export const getInvoiceByID = async (req, res, next) => {
             })
         }
 
-        res.status(200).json({
-            invoice
+        return res.status(200).json({
+            success: true,
+            data: { invoice },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -95,14 +99,16 @@ export const getAllInvoicesForParentId = async (req, res, next) => {
             })
         }
 
-        res.status(200).json({
-            invoices
+        return res.status(200).json({
+            success: true,
+            data: { invoices },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -120,10 +126,16 @@ export const createNewInvoice = async (req, res, next) => {
         // Figure out if i can auto at the duedate run finalizeInvoice()
 
         // Return success
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -138,10 +150,16 @@ export const finalizeInvoice = async (req, res, next) => {
         // Finalize Invoice with Stripe
 
         // Return success
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -171,13 +189,15 @@ export const getAllInvoiceHistory = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            invoices
+            success: true,
+            data: { invoices },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -199,14 +219,16 @@ export const getAllInvoiceHistoryForParentId = async (req, res, next) => {
             })
         }
 
-        res.status(200).json({
-            invoices
+        return res.status(200).json({
+            success: true,
+            data: { invoices },
+            error: null
         })
-    
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -215,11 +237,16 @@ export const getAllInvoiceHistoryForParentId = async (req, res, next) => {
 export const makePayment = async (req, res, next) => {
     try {
         // Implement Stripe Invoice Pipeline
-    
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -229,11 +256,16 @@ export const makeRecurringPayment = async (req, res, next) => {
     try {
         // Implement Stripe Invoice Pipeline 
         // See if this can be used to auto charge when an invoice hits its due date
-    
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
@@ -243,11 +275,16 @@ export const stripeWebhook = async (req, res, next) => {
     try {
 
         // Ya brother you dont need me to tell you what to do here.
-    
+        return res.status(200).json({
+            success: true,
+            data: { },
+            error: null
+        })
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
-            error: err
+            success: false,
+            data: {},
+            error: { message: err.message }
         })
     }
 }
