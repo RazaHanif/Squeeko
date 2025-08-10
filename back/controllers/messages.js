@@ -9,16 +9,16 @@ export const sendMessageOffline = async (req, res, next) => {
         if (!session) return res.status(401).json({
             error: 'Unauthorized'
         })
-        const data = req.body
+        const { sender_id, receiver_id, content, image_url }  = req.body
 
         // Feel like I should do some sort of server side validation here?
 
         const message = await prisma.message.create({
             data: {
-                sender_id: data.sender_id,
-                receiver_id: data.receiver_id,
-                content: data.content || null,
-                image_url: data.image_url || null
+                sender_id: sender_id,
+                receiver_id: receiver_id,
+                content: content || null,
+                image_url: image_url || null
             }
         })
 
