@@ -18,7 +18,10 @@ export default messageSocketHandler = (io) => {
         console.log(`User connected: ${socket.id}`)
 
         // make socket_user_id same as user_id
-        socket.on('join')
+        socket.on('join', (userId) => {
+            socket.join(userId)
+            console.log(`User ${userId} joined room`)
+        })
     })
 
     socket.on('send_message', async (data) => {
