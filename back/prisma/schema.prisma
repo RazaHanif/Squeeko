@@ -16,14 +16,12 @@ model User {
   last_name   String
   role        Role
 
-  sentMessages     Message[]
-  receivedMessages Message[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 
   parent Parent?
   staff  Staff?
-
   Center  Center[]
-  Message Message[]
 }
 
 model Center {
@@ -165,9 +163,9 @@ model Invoice {
 
 model Message {
   id          String   @id @default(cuid())
-  sender      User     @relation(fields: [sender_id], references: [id])
+  sender      User     @relation("SentMessages", fields: [sender_id], references: [id])
   sender_id   String
-  receiver    User     @relation(fields: [receiver_id], references: [id])
+  receiver    User     @relation("ReceivedMessages", fields: [receiver_id], references: [id])
   receiver_id String
   content     String?
   image_url   String?
