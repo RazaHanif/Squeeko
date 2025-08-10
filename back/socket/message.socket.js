@@ -1,18 +1,5 @@
 import prisma from '../db/prisma'
 
-/* 
-model Message {
-  id          String   @id @default(cuid())
-  sender      User     @relation("SentMessages", fields: [sender_id], references: [id])
-  sender_id   String
-  receiver    User     @relation("ReceivedMessages", fields: [receiver_id], references: [id])
-  receiver_id String
-  content     String?
-  image_url   String?
-  created_at  DateTime @default(now())
-}
-*/
-
 export const messageSocketHandler = (io) => {
     io.on('connection', (socket) => {
         console.log(`User connected: ${socket.id}`)
