@@ -1,6 +1,15 @@
 import { Router } from 'express';
 import { fetchHistory, sendMessageOffline, uploadMedia } from '../controllers/messages';import multer from 'multer';
-const upload = multer({ storage: multer.memoryStorage() });
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            return cb(new Error('Invalid file type'), false)
+        }
+        cb(null, true)
+    }
+});
 
 
 const router = Router();
