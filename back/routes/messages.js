@@ -4,7 +4,7 @@ import { fetchHistory, sendMessageOffline, uploadMedia } from '../controllers/me
 const upload = multer({
     storage: multer.memoryStorage(),
     fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
+        if (!file.mimetype.startsWith('image/')) {
             return cb(new Error('Invalid file type'), false)
         }
         cb(null, true)
