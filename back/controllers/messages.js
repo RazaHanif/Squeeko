@@ -20,6 +20,10 @@ model Message {
 // Send a message
 export const sendMessageOffline = async (req, res, next) => {
     try {
+        const session = await auth.api.getSession({ req })
+        if (!session) return res.status(401).json({
+            error: 'Unauthorized'
+        })
         const data = req.body
 
         // Feel like I should do some sort of server side validation here?
@@ -28,8 +32,14 @@ export const sendMessageOffline = async (req, res, next) => {
             data: {
                 sender_id: data.sender_id,
                 receiver_id: data.receiver_id,
-                content: data.content,
+                content: data.content || null,
+                image_url: data.image_url || null
             }
+        })
+
+        // Should be good?
+        res.status(200).json({
+            message
         })
     } catch (err) {
         console.log(err)
@@ -42,6 +52,12 @@ export const sendMessageOffline = async (req, res, next) => {
 // Get message thread with another user
 export const fetchHistory = async (req, res, next) => {
     try {
+        const session = await auth.api.getSession({ req })
+        if (!session) return res.status(401).json({
+            error: 'Unauthorized'
+        })
+
+        const {  } = req.body 
     
     } catch (err) {
         console.log(err)
@@ -55,7 +71,12 @@ export const fetchHistory = async (req, res, next) => {
 // Figure out how to upload to s3 with presigned url - or supabase idk yet
 export const uploadImage = async (req, res, next) => {
     try {
-    
+        const session = await auth.api.getSession({ req })
+        if (!session) return res.status(401).json({
+            error: 'Unauthorized'
+        })
+        
+        
     } catch (err) {
         console.log(err)
         return res.status(500).json({
