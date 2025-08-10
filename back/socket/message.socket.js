@@ -17,7 +17,8 @@ export default messageSocketHandler = (io) => {
     io.on('connection', (socket) => {
         console.log(`User connected: ${socket.id}`)
 
-        // 
+        // make socket_user_id same as user_id
+        socket.on('join')
     })
 
     socket.on('send_message', async (data) => {
