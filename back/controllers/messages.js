@@ -86,7 +86,7 @@ export const fetchHistory = async (req, res, next) => {
 }
 
 // Attach media to a message
-// Figure out how to upload to s3 with presigned url - or supabase idk yet
+// Should only work for images rn because of middleware check on routes
 export const uploadMedia = async (req, res, next) => {
     try {
         const session = await auth.api.getSession({ req })
@@ -104,7 +104,6 @@ export const uploadMedia = async (req, res, next) => {
 
         const filename = `${uuidv4()}-${file.originalname}`
 
-        // I guess this should work for all types of media not just images?
         const { data, error } = await supabase.storage.from('chat-images').upload(filename, file.buffer, {
             contentType: file.mimetype
         })
