@@ -1,10 +1,11 @@
 import prisma from '../db/prisma'
 
+// Websocket for realtime messages
 export const messageSocketHandler = (io) => {
     io.on('connection', (socket) => {
-        console.log(`User connected: ${socket.id}`)
+        socket.emit('connected', `User connected with id: ${socket.id}`)
 
-        // Make socket_user_id same as user_id to avoid conflicts
+        // Make socket.id same as user_id to avoid conflicts
         socket.on('join', (user_id) => {
             socket.join(user_id)
             console.log(`User ${user_id} joined`)
