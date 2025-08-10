@@ -30,12 +30,14 @@ export default messageSocketHandler = (io) => {
                     image_url: image_url || null
                 }
             })
+            io.to(receiver_id).emit('receive_message', message)
         }
-
-        
-
         catch (err) {
             console.log(err)
         }
+    })
+
+    socket.on('disconnect', () => {
+        console.log(`User disconnected: ${socket.id}`)
     })
 }
