@@ -5,12 +5,13 @@ export const messageSocketHandler = (io) => {
     io.on('connection', (socket) => {
         socket.emit('connected', `User connected with id: ${socket.id}`)
 
-        // Make socket.id same as user_id to avoid conflicts
+        // Create room for user_id
         socket.on('join', (user_id) => {
             socket.join(user_id)
-            console.log(`User ${user_id} joined`)
+            socket.emit('joined', { message: 'User joined room' })
         })
 
+        // Send/Receive message
         socket.on('send_message', async (data) => {
             try {
                 const { sender_id, receiver_id, content, image_url } = data
@@ -23,12 +24,13 @@ export const messageSocketHandler = (io) => {
                         image_url: image_url || null
                     }
                 })
+
+                // Send message to receiver
                 io.to(receiver_id).emit('receive_message', message)
-                socket.emit('message_sent', message)
+                socket.emit('sent_message', message)
             }
             catch (err) {
-                console.log(err)
-                socket.emit('error', 'Failed to send message')
+                socket.emit('error', { message: `Failed to send message: ${err}` })
             }
         })
 
