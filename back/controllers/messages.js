@@ -16,50 +16,48 @@ model Message {
 */
 
 // Send a message
-export const sendMessage = async (req, res, next) => {
+export const sendMessageOffline = async (req, res, next) => {
     try {
-    
+        const data = req.body
+
+        // Feel like I should do some sort of server side validation here?
+
+        const message = await prisma.message.create({
+            data: {
+                sender_id: data.sender_id,
+                receiver_id: data.receiver_id,
+                content: data.content,
+            }
+        })
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
 
 // Get message thread with another user
-export const getMessageThread = async (req, res, next) => {
+export const fetchHistory = async (req, res, next) => {
     try {
     
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
-        })
-    }
-}
-
-// Get current users messages
-export const getCurrentUserMessages = async (req, res, next) => {
-    try {
-    
-    } catch (err) {
-        console.log(err)
-        return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
 
 // Attach media to a message
 // Figure out how to upload to s3 with presigned url - or supabase idk yet
-export const uploadMediaToMessage = async (req, res, next) => {
+export const uploadImage = async (req, res, next) => {
     try {
     
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: `Error: ${err}`
+            error: err
         })
     }
 }
