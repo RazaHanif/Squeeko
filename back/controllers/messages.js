@@ -94,7 +94,15 @@ export const uploadImage = async (req, res, next) => {
             error: 'Unauthorized'
         })
 
-        const { file } = req.body
+        const file = req.file
+
+        if (!file) {
+            return res.status(400).json({
+                error: 'Invalid File'
+            })
+        }
+
+        
         
         
     } catch (err) {
