@@ -37,9 +37,11 @@ export default messageSocketHandler = (io) => {
                 }
             })
             io.to(receiver_id).emit('receive_message', message)
+            socket.emit('message_sent', message)
         }
         catch (err) {
             console.log(err)
+            socket.emit('error', 'Failed to send message')
         }
     })
 
