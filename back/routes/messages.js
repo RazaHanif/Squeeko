@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getCurrentUserMessages, getMessageThread, sendMessage, uploadMediaToMessage } from '../controllers/messages';
+import { fetchHistory, sendMessageOffline, uploadMedia } from '../controllers/messages';import multer from 'multer';
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 const router = Router();
 
-router.post('/messages', sendMessage)
-router.get('/messages/thread/:id', getMessageThread)
-router.get('/messages/inbox/', getCurrentUserMessages)
-router.post('/messages/upload', uploadMediaToMessage)
+router.post('/offline_messages', sendMessageOffline)
+router.get('/history', fetchHistory)
+router.post('/upload', upload.single('file'), uploadMedia)
 
 export default router;
