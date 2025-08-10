@@ -17,10 +17,10 @@ export const messageSocketHandler = (io) => {
     io.on('connection', (socket) => {
         console.log(`User connected: ${socket.id}`)
 
-        // make socket_user_id same as user_id
+        // Make socket_user_id same as user_id to avoid conflicts
         socket.on('join', (user_id) => {
             socket.join(user_id)
-            console.log(`User ${user_id} joined room`)
+            console.log(`User ${user_id} joined`)
         })
 
         socket.on('send_message', async (data) => {
