@@ -102,7 +102,8 @@ export const uploadMedia = async (req, res, next) => {
             })
         }
 
-        const filename = `${uuidv4()}-${file.originalname}`
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '');
+        const filename = `${uuidv4()}-${safeName}`;
 
         const { data, error } = await supabase.storage.from('chat-images').upload(filename, file.buffer, {
             contentType: file.mimetype
