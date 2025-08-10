@@ -57,8 +57,26 @@ export const fetchHistory = async (req, res, next) => {
             error: 'Unauthorized'
         })
 
-        const {  } = req.body 
-    
+        const currentUserId = session.user.id
+        const { otherUserId } = req.body
+
+        const messages = await prisma.message.findMany({
+            where: {
+                OR: [
+                    { sender_id: currentUserId, receiver_id: otherUserId },
+                    { sender_id: otherUserId, receiver_id: currentUserId }
+                ]
+            },
+            orderBy: {
+                created_at: 'asc'
+            }
+        })
+
+        // Feel like there should be a check to see if it exists
+
+        res.status(200).json({
+            messages
+        })
     } catch (err) {
         console.log(err)
         return res.status(500).json({
@@ -75,6 +93,8 @@ export const uploadImage = async (req, res, next) => {
         if (!session) return res.status(401).json({
             error: 'Unauthorized'
         })
+
+        const { file } = req.body
         
         
     } catch (err) {
