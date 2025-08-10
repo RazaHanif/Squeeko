@@ -1,4 +1,6 @@
 import express from 'express'
+import http from 'http'
+import { Server } from 'socket.io'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from './auth'
 import cors from 'cors'
@@ -7,7 +9,7 @@ import morgan from 'morgan'
 import config from './config/index'
 import authRoutes from './routes/auth'
 import cookieParser from 'cookie-parser'
-
+import { messageSocketHandler } from './socket/message.socket'
 
 const app = express()
 
@@ -18,7 +20,7 @@ app.all("/api/auth/*", toNodeHandler(auth))
 
 app.use(express.json())
 app.use(cors())
-app.use(helemt())
+app.use(helmet())
 app.use(morgan('dev'))
 app.use(cookieParser())
 
@@ -33,6 +35,17 @@ app.use((err, req, res, next) => {
     console.error(err)
     res.status(500).send('oopsypoopsy')
 })
+
+const server = http.createServer(app)
+
+const io = new Server(server, {
+    cors: {
+        origin: '*', // FIX THIS FOR PROD
+        methods: ['GET', 'POST']
+    }
+})
+
+messageSocketHandler(io)
 
 const PORT = config.PORT
 
