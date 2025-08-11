@@ -33,6 +33,8 @@ model Center {
   supervisor    User    @relation(fields: [supervisor_id], references: [id])
   supervisor_id String
   stripe_id     String?
+  stripe_status String?
+  payout_schedule String?
 
   parents            Parent[]
   staff              Staff[]
@@ -54,6 +56,7 @@ model Parent {
   user             User    @relation(fields: [user_id], references: [id])
   user_id          String  @unique
   stripe_id        String?
+  payment_method_id String?
 
   children Child[]
   invoices Invoice[]
