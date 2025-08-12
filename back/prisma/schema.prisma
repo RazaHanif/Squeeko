@@ -88,6 +88,7 @@ model Child {
   gender         ChildGender
   center         Center      @relation(fields: [center_id], references: [id])
   center_id      String
+  tuition String?
 
   parents            Parent[]
   emergency_contacts EmergencyContact[]

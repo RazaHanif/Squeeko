@@ -24,6 +24,7 @@
     "morgan": "^1.10.0",
     "postgres": "^3.4.7",
     "socket.io": "^4.8.1",
+    "stripe": "^18.4.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
